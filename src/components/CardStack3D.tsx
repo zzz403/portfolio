@@ -9,7 +9,7 @@ import CardStackPreview from "./CardStackPreview";
 const expo = [0.16, 1, 0.3, 1] as const;
 
 // Card spacing along the Z axis (px equivalent via translateZ).
-const Z_SPACING = 50;
+const Z_SPACING = 100;
 // Small Y offset per card for the staircase look.
 const Y_OFFSET = 10;
 

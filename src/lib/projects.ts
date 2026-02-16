@@ -12,6 +12,7 @@ export interface Project {
   url?: string;
   github?: string;
   featured?: boolean;
+  highlight?: number;
   codeSnippet?: string;
   content: string;
 }
@@ -33,6 +34,7 @@ function parseProject(filename: string): Project {
     url: data.url,
     github: data.github,
     featured: data.featured ?? false,
+    highlight: data.highlight,
     codeSnippet: data.codeSnippet,
     content,
   };
@@ -51,6 +53,12 @@ export function getFeaturedProjects(): Project[] {
 
 export function getOtherProjects(): Project[] {
   return getAllProjects().filter((p) => !p.featured);
+}
+
+export function getHighlightProjects(): Project[] {
+  return getAllProjects()
+    .filter((p) => p.highlight != null && p.highlight > 0)
+    .sort((a, b) => a.highlight! - b.highlight!);
 }
 
 export function getProjectBySlug(slug: string): Project | undefined {
