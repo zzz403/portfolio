@@ -296,7 +296,7 @@ export default function YouWoDemo({
   const showResponse = isStreaming || phase === "complete";
 
   return (
-    <div ref={containerRef} className="overflow-hidden rounded-lg bg-[#0a0a0a] border border-border">
+    <div ref={containerRef} className="overflow-hidden rounded-lg bg-background border border-border">
       {/* Title bar */}
       <div className="flex items-center gap-3 px-4 py-2.5 border-b border-border">
         <div className="flex items-center gap-1.5">
@@ -439,10 +439,10 @@ export default function YouWoDemo({
                   className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 transition-colors"
                   style={{
                     backgroundColor:
-                      typed.length > 0 ? "#e0ff00" : "#222",
+                      typed.length > 0 ? "var(--accent)" : "var(--border)",
                     boxShadow:
                       typed.length > 0
-                        ? "0 4px 16px rgba(224,255,0,0.25)"
+                        ? "0 4px 16px rgba(0,0,0,0.25)"
                         : "none",
                   }}
                   animate={
@@ -454,7 +454,7 @@ export default function YouWoDemo({
                   <span
                     className="text-xs font-bold"
                     style={{
-                      color: typed.length > 0 ? "#050505" : "#555",
+                      color: typed.length > 0 ? "var(--background)" : "var(--muted)",
                     }}
                   >
                     &#8593;
@@ -502,7 +502,7 @@ export default function YouWoDemo({
         <AnimatePresence>
           {showUserMsg && (
             <motion.div
-              className="absolute inset-0 flex flex-col justify-center px-4 py-3 bg-[#0a0a0a]"
+              className="absolute inset-0 flex flex-col justify-center px-4 py-3 bg-background"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.25 }}

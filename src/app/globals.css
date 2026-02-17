@@ -2,6 +2,14 @@
 
 /* ── Design Tokens ── */
 :root {
+  --font-geist-sans: var(--font-geist-sans);
+  --font-geist-mono: var(--font-geist-mono);
+  --font-serif: var(--font-eb-garamond);
+  --ease-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Dark theme (default) */
+.dark {
   --background: #0f0e17;
   --foreground: #fffffe;
   --muted: #a7a9be;
@@ -9,10 +17,17 @@
   --surface: #171625;
   --surface-hover: #1f1e30;
   --border: #2a293d;
-  --font-geist-sans: var(--font-geist-sans);
-  --font-geist-mono: var(--font-geist-mono);
-  --font-serif: var(--font-eb-garamond);
-  --ease-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Light theme */
+.light {
+  --background: #fef6e4;
+  --foreground: #001858;
+  --muted: #172c66;
+  --accent: #f582ae;
+  --surface: #f3d2c1;
+  --surface-hover: #edd5c8;
+  --border: #d4b8a8;
 }
 
 @theme inline {
@@ -44,6 +59,7 @@ body {
   color: var(--foreground);
   font-family: var(--font-sans), system-ui, sans-serif;
   line-height: 1.6;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 ::selection {
@@ -102,6 +118,14 @@ body {
 
 .name-glow {
   text-shadow: 0 0 40px rgba(255, 255, 255, 0.1);
+}
+
+/* Invert hero line art in light mode */
+.hero-line-art {
+  transition: filter 0.3s ease;
+}
+.light .hero-line-art {
+  filter: invert(1);
 }
 
 /* ── Prose Styles for MDX ── */

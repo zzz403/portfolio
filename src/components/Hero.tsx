@@ -25,7 +25,7 @@ export default function Hero() {
           src="/pic-lines.svg"
           alt=""
           aria-hidden="true"
-          className="h-[600px] w-auto select-none pointer-events-none"
+          className="hero-line-art h-[600px] w-auto select-none pointer-events-none"
           draggable={false}
         />
       </motion.div>

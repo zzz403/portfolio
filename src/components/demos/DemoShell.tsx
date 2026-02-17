@@ -47,7 +47,7 @@ export default function DemoShell({
   return (
     <div
       ref={ref}
-      className="overflow-hidden rounded-lg bg-[#0a0a0a] border border-border"
+      className="overflow-hidden rounded-lg bg-background border border-border"
     >
       {/* Title bar */}
       <div className="flex items-center gap-3 px-4 py-2.5 border-b border-border">

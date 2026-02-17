@@ -282,6 +282,19 @@ transition={{ duration: 1.5, repeat: Infinity, repeatDelay: index * 0.15, ease: 
 4. **onComplete in deps**: Use `onCompleteRef` pattern — never put `onComplete` in `run()`'s useCallback deps.
 5. **Text sizes**: Demos are miniaturized. Use `text-[7px]` to `text-[10px]`. Max `text-xs` (12px) for primary.
 6. **Colors**: Use design tokens (`accent`, `muted`, `foreground`, `border`, `surface`). Project-specific hex with opacity suffixes (`#e06c7520`).
+7. **NEVER hardcode dark-mode colors** (e.g., `bg-[#0a0a0a]`, `bg-[#141414]`, `border-[#222]`). The site supports dark/light theme switching via `.dark` / `.light` CSS classes. Always use Tailwind theme classes or `var(--token)` for inline styles:
+
+   | Instead of | Use |
+   |------------|-----|
+   | `bg-[#0a0a0a]`, `bg-[#0e0e0e]` | `bg-background` |
+   | `bg-[#141414]`, `bg-[#181818]` | `bg-surface` |
+   | `bg-[#1a1a1a]` | `bg-surface-hover` |
+   | `border-[#222]`, `border-[#333]` | `border-border` |
+   | `text-[#333]` | `text-muted/40` |
+   | Inline `backgroundColor: "#e0ff00"` | `backgroundColor: "var(--accent)"` |
+   | Inline `color: "#050505"` | `color: "var(--background)"` |
+
+   The traffic light dots (`bg-[#ff5f57]`, `bg-[#febc2e]`, `bg-[#28c840]`) are the only exception — these are universal macOS chrome colors and stay hardcoded.
 
 ## File Reference
 

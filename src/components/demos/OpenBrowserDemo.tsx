@@ -204,7 +204,7 @@ export default function OpenBrowserDemo({
   return (
     <div
       ref={containerRef}
-      className="overflow-hidden rounded-lg bg-[#0a0a0a] border border-border"
+      className="overflow-hidden rounded-lg bg-background border border-border"
     >
       {/* Title bar */}
       <div className="flex items-center gap-3 px-4 py-2.5 border-b border-border">
@@ -229,14 +229,14 @@ export default function OpenBrowserDemo({
               transition={{ duration: 0.4 }}
             >
               {/* ── Mini browser chrome ── */}
-              <div className="h-full rounded-lg border border-border bg-[#0e0e0e] flex flex-col overflow-hidden">
+              <div className="h-full rounded-lg border border-border bg-background flex flex-col overflow-hidden">
                 {/* URL bar */}
                 <div className="flex items-center gap-2 px-2.5 py-1.5 border-b border-border shrink-0">
                   <div className="flex gap-1">
                     <span className="text-muted text-[8px]">&#8592;</span>
                     <span className="text-muted text-[8px]">&#8594;</span>
                   </div>
-                  <div className="flex-1 rounded bg-[#181818] px-2 py-0.5 text-[8px] font-mono text-muted truncate">
+                  <div className="flex-1 rounded bg-surface px-2 py-0.5 text-[8px] font-mono text-muted truncate">
                     https://amazon.com/s?q={typed || "..."}
                   </div>
                 </div>
@@ -254,13 +254,13 @@ export default function OpenBrowserDemo({
                       >
                         {/* Search bar */}
                         <div className="relative">
-                          <div className="flex items-center rounded border border-[#333] bg-[#141414] px-2 py-1.5">
+                          <div className="flex items-center rounded border border-border bg-surface px-2 py-1.5">
                             <span className="text-[8px] text-muted mr-1">
                               🔍
                             </span>
                             <span className="text-[9px] font-mono text-foreground/70">
                               {typed || (
-                                <span className="text-[#333]">
+                                <span className="text-muted/40">
                                   Search products...
                                 </span>
                               )}
@@ -307,7 +307,7 @@ export default function OpenBrowserDemo({
                           {["Electronics", "Books", "Fashion"].map((c) => (
                             <div
                               key={c}
-                              className="rounded bg-[#181818] px-2 py-0.5 text-[7px] text-muted"
+                              className="rounded bg-surface px-2 py-0.5 text-[7px] text-muted"
                             >
                               {c}
                             </div>
@@ -341,11 +341,11 @@ export default function OpenBrowserDemo({
                           {[0, 1].map((idx) => (
                             <div
                               key={idx}
-                              className="relative rounded border border-[#222] bg-[#141414] p-2"
+                              className="relative rounded border border-border bg-surface p-2"
                             >
-                              <div className="w-full h-6 rounded bg-[#1a1a1a] mb-1.5" />
-                              <div className="h-1.5 w-3/4 rounded bg-[#1a1a1a] mb-1" />
-                              <div className="h-1.5 w-1/2 rounded bg-[#1a1a1a]" />
+                              <div className="w-full h-6 rounded bg-surface-hover mb-1.5" />
+                              <div className="h-1.5 w-3/4 rounded bg-surface-hover mb-1" />
+                              <div className="h-1.5 w-1/2 rounded bg-surface-hover" />
                               <AnimatePresence>
                                 {showBbox && bboxCount >= 3 + idx && (
                                   <motion.div
@@ -388,8 +388,8 @@ export default function OpenBrowserDemo({
                         </div>
 
                         {/* Result item */}
-                        <div className="rounded border border-[#222] bg-[#141414] p-2 flex gap-2">
-                          <div className="w-10 h-10 rounded bg-[#1a1a1a] shrink-0 flex items-center justify-center">
+                        <div className="rounded border border-border bg-surface p-2 flex gap-2">
+                          <div className="w-10 h-10 rounded bg-surface-hover shrink-0 flex items-center justify-center">
                             <span className="text-[10px]">🎧</span>
                           </div>
                           <div className="flex-1 min-w-0">
@@ -405,11 +405,11 @@ export default function OpenBrowserDemo({
                           </div>
                         </div>
 
-                        <div className="rounded border border-[#222] bg-[#141414] p-2 flex gap-2 opacity-40">
-                          <div className="w-10 h-10 rounded bg-[#1a1a1a] shrink-0" />
+                        <div className="rounded border border-border bg-surface p-2 flex gap-2 opacity-40">
+                          <div className="w-10 h-10 rounded bg-surface-hover shrink-0" />
                           <div className="flex-1 space-y-1">
-                            <div className="h-1.5 w-3/4 rounded bg-[#1a1a1a]" />
-                            <div className="h-1.5 w-1/2 rounded bg-[#1a1a1a]" />
+                            <div className="h-1.5 w-3/4 rounded bg-surface-hover" />
+                            <div className="h-1.5 w-1/2 rounded bg-surface-hover" />
                           </div>
                         </div>
                       </motion.div>
@@ -494,7 +494,7 @@ export default function OpenBrowserDemo({
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0 }}
                     transition={springSnappy}
-                    className="absolute bottom-3 left-3 right-3 flex items-center gap-3 rounded-lg bg-[#0e0e0e] border border-border px-3 py-2"
+                    className="absolute bottom-3 left-3 right-3 flex items-center gap-3 rounded-lg bg-background border border-border px-3 py-2"
                   >
                     <div className="flex-1">
                       <div className="text-[7px] font-mono text-muted mb-0.5">
