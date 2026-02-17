@@ -2,13 +2,13 @@
 
 /* ── Design Tokens ── */
 :root {
-  --background: #050505;
-  --foreground: #f0f0f0;
-  --muted: #888888;
-  --accent: #e0ff00;
-  --surface: #111111;
-  --surface-hover: #1a1a1a;
-  --border: #222222;
+  --background: #0f0e17;
+  --foreground: #fffffe;
+  --muted: #a7a9be;
+  --accent: #ff8906;
+  --surface: #171625;
+  --surface-hover: #1f1e30;
+  --border: #2a293d;
   --font-geist-sans: var(--font-geist-sans);
   --font-geist-mono: var(--font-geist-mono);
   --font-serif: var(--font-eb-garamond);
