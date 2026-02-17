@@ -3,8 +3,8 @@ import { getPostsByYear } from "@/lib/blog";
 import ScrollReveal from "@/components/ScrollReveal";
 
 export const metadata = {
-  title: "Blog — August",
-  description: "Writing about engineering, projects, and everything in between.",
+  title: "Blog",
+  description: "Notes on engineering, projects, and the occasional wandering thought.",
 };
 
 const categoryLabel: Record<string, string> = {

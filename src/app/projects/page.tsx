@@ -4,8 +4,8 @@ import FilterableProjectGrid from "@/components/FilterableProjectGrid";
 import ScrollReveal from "@/components/ScrollReveal";
 
 export const metadata = {
-  title: "Projects — August",
-  description: "Selected projects by August.",
+  title: "Projects",
+  description: "Selected projects by August Zheng — AI infrastructure, web applications, and research.",
 };
 
 export default function ProjectsPage() {

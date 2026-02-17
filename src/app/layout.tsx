@@ -26,8 +26,39 @@ const ebGaramond = EB_Garamond({
 });
 
 export const metadata: Metadata = {
-  title: "August — Developer & Creator",
-  description: "Personal portfolio of August.",
+  title: {
+    default: "August Zheng — AI Infrastructure Engineer",
+    template: "%s — August",
+  },
+  description:
+    "Engineering the infrastructure for reliable intelligence. Focusing on performance, scalability, and system integrity.",
+  keywords: [
+    "August Zheng",
+    "AI Infrastructure",
+    "Software Engineer",
+    "LLM Systems",
+    "University of Toronto",
+    "Portfolio",
+  ],
+  authors: [{ name: "August Zheng" }],
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    title: "August Zheng — AI Infrastructure Engineer",
+    description:
+      "Engineering the infrastructure for reliable intelligence. Focusing on performance, scalability, and system integrity.",
+    siteName: "August Zheng",
+  },
+  twitter: {
+    card: "summary",
+    title: "August Zheng — AI Infrastructure Engineer",
+    description:
+      "Engineering the infrastructure for reliable intelligence. Focusing on performance, scalability, and system integrity.",
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 export default function RootLayout({
