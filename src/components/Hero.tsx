@@ -13,6 +13,23 @@ export default function Hero() {
         <div className="absolute bottom-[10%] right-[5%] h-[300px] w-[500px] rounded-full bg-blue-500/5 blur-[100px]" />
       </div>
 
+      {/* Profile line art */}
+      <motion.div
+        className="absolute right-[5%] top-1/2 -translate-y-1/2 -z-[5] hidden lg:block"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 0.08 }}
+        transition={{ duration: 2, delay: 0.8, ease: expo }}
+      >
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/pic-lines.svg"
+          alt=""
+          aria-hidden="true"
+          className="h-[600px] w-auto select-none pointer-events-none"
+          draggable={false}
+        />
+      </motion.div>
+
       <div className="mx-auto w-full max-w-6xl">
         <div className="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
           <div className="flex-1">
