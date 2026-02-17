@@ -1,0 +1,23 @@
+---
+title: "Building YouWoAI's LLM Architecture"
+description: "How we designed a large-scale system where retrieval, orchestration, and evaluation work together."
+date: "2026-02-10"
+category: "project"
+project: "youwoai"
+---
+
+## Overview
+
+When building YouWoAI, we faced a fundamental design question: how do you make an LLM system that's both accurate and reliable at scale?
+
+Most architectures treat retrieval, orchestration, and evaluation as separate concerns. We took a different approach — co-designing them so each component informs the others.
+
+## The Problem
+
+Traditional RAG pipelines are linear: retrieve, then generate, then (maybe) evaluate. This creates blind spots. The retriever doesn't know what the generator struggles with. The evaluator catches errors too late.
+
+## Our Approach
+
+We built a feedback loop between all three layers. The evaluator's signals feed back into retrieval ranking. The orchestrator adapts its strategy based on real-time confidence scores.
+
+The result: fewer hallucinations, better source attribution, and a system that genuinely improves with usage.

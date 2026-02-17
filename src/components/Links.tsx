@@ -3,6 +3,8 @@
 import { motion } from "framer-motion";
 import ScrollReveal from "./ScrollReveal";
 
+const expo = [0.16, 1, 0.3, 1] as const;
+
 const links = [
   { label: "GitHub", href: "https://github.com/zzz403" },
   { label: "LinkedIn", href: "https://www.linkedin.com/in/augustzheng/" },
@@ -11,29 +13,36 @@ const links = [
 
 export default function Links() {
   return (
-    <section className="px-6 py-24">
+    <section id="contact" className="px-6 py-32">
       <div className="mx-auto max-w-6xl">
         <ScrollReveal>
-          <p className="font-mono text-sm text-accent mb-6">Links</p>
+          <p className="font-mono text-sm text-accent mb-4">Contact</p>
         </ScrollReveal>
-        <div className="flex flex-wrap gap-3">
-          {links.map((link, i) => (
-            <ScrollReveal key={link.label} delay={0.1 * i}>
+        <ScrollReveal delay={0.1}>
+          <p className="text-2xl font-medium tracking-tight text-foreground max-w-md leading-snug">
+            Open to interesting problems<br />
+            <span className="text-muted">and the people solving them.</span>
+          </p>
+        </ScrollReveal>
+
+        <ScrollReveal delay={0.2}>
+          <div className="mt-10 flex flex-wrap items-center gap-x-8 gap-y-3">
+            {links.map((link) => (
               <motion.a
+                key={link.label}
                 href={link.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-full border border-border bg-surface px-5 py-2.5 text-sm font-medium text-foreground transition-colors hover:bg-surface-hover"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.98 }}
-                transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
+                className="font-mono text-sm text-muted transition-colors hover:text-foreground"
+                whileHover={{ x: 2 }}
+                transition={{ duration: 0.2, ease: expo }}
               >
                 {link.label}
-                <span className="text-muted">&#8599;</span>
+                <span className="ml-1 text-border">&#8599;</span>
               </motion.a>
-            </ScrollReveal>
-          ))}
-        </div>
+            ))}
+          </div>
+        </ScrollReveal>
       </div>
     </section>
   );

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import type { Project } from "@/lib/projects";
@@ -68,6 +68,15 @@ export default function FilterableProjectGrid({
   projects: Project[];
 }) {
   const [active, setActive] = useState<Category>("All");
+  const gridRef = useRef<HTMLDivElement>(null);
+  const [minHeight, setMinHeight] = useState<number>(0);
+
+  // Capture the grid height when showing "All" (the tallest state)
+  useEffect(() => {
+    if (active === "All" && gridRef.current) {
+      setMinHeight(gridRef.current.scrollHeight);
+    }
+  }, [active, projects]);
 
   const filtered =
     active === "All"
@@ -94,7 +103,11 @@ export default function FilterableProjectGrid({
       </div>
 
       {/* Grid */}
-      <div className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+      <div
+        ref={gridRef}
+        className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 transition-[min-height] duration-300 ease-out"
+        style={{ minHeight: minHeight > 0 ? minHeight : undefined }}
+      >
         <AnimatePresence mode="popLayout">
           {filtered.map((project, i) => (
             <GridCard key={project.slug} project={project} index={i} />
