@@ -155,10 +155,10 @@ export default function YouWoDemo({
     setPhase("cursorToSend");
     setCursorVisible(true);
     // Start from bottom right
-    setCursorPos({ x: 95, y: 85 });
+    setCursorPos({ x: 85, y: 75 });
     if (!(await wait(60))) return;
-    // Move to send button (right side of bar, accounting for snap shift)
-    setCursorPos({ x: 78, y: 50 });
+    // Move to send button (right end of chat bar)
+    setCursorPos({ x: 80, y: 50 });
     if (!(await wait(400))) return;
 
     /* ═══ Stage 6: Click send ═══ */
@@ -337,10 +337,10 @@ export default function YouWoDemo({
                     animate={
                       i < visibleSources
                         ? {
-                            opacity: 1,
-                            y: showCollapse ? 0 : [0, -5, 0],
-                            scale: showCollapse ? 1 : [1, 1.02, 1],
-                          }
+                          opacity: 1,
+                          y: showCollapse ? 0 : [0, -5, 0],
+                          scale: showCollapse ? 1 : [1, 1.02, 1],
+                        }
                         : { opacity: 0, y: -24, scale: 0.6 }
                     }
                     transition={{
@@ -348,19 +348,19 @@ export default function YouWoDemo({
                       y: showCollapse
                         ? spring
                         : {
-                            duration: 1.5,
-                            repeat: Infinity,
-                            repeatDelay: i * 0.15,
-                            ease: "easeInOut",
-                          },
+                          duration: 1.5,
+                          repeat: Infinity,
+                          repeatDelay: i * 0.15,
+                          ease: "easeInOut",
+                        },
                       scale: showCollapse
                         ? spring
                         : {
-                            duration: 1.5,
-                            repeat: Infinity,
-                            repeatDelay: i * 0.15,
-                            ease: "easeInOut",
-                          },
+                          duration: 1.5,
+                          repeat: Infinity,
+                          repeatDelay: i * 0.15,
+                          ease: "easeInOut",
+                        },
                     }}
                   >
                     <div
@@ -470,12 +470,11 @@ export default function YouWoDemo({
           {cursorVisible && (
             <motion.div
               className="absolute z-50 pointer-events-none"
-              style={{ left: 0, top: 0 }}
-              initial={{ opacity: 0 }}
+              initial={{ opacity: 0, left: `${cursorPos.x}%`, top: `${cursorPos.y}%` }}
               animate={{
                 opacity: 1,
-                x: `${cursorPos.x}%`,
-                y: `${cursorPos.y}%`,
+                left: `${cursorPos.x}%`,
+                top: `${cursorPos.y}%`,
                 scale: cursorClick ? 0.75 : 1,
               }}
               exit={{ opacity: 0 }}
@@ -502,7 +501,7 @@ export default function YouWoDemo({
         <AnimatePresence>
           {showUserMsg && (
             <motion.div
-              className="absolute inset-0 flex flex-col justify-center px-4 py-3 bg-background"
+              className="absolute inset-0 flex flex-col justify-center px-5 py-4 bg-background"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.25 }}
@@ -512,10 +511,10 @@ export default function YouWoDemo({
                 initial={{ opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={spring}
-                className="flex justify-end mb-2.5"
+                className="flex justify-end mb-3"
               >
-                <div className="px-3 py-1.5 rounded-2xl rounded-br-md max-w-[85%] bg-accent/15">
-                  <p className="text-[10px] font-mono font-medium text-accent">
+                <div className="px-4 py-2 rounded-2xl rounded-br-md max-w-[85%] bg-accent/15">
+                  <p className="text-xs font-mono font-medium text-accent">
                     {QUESTION}
                   </p>
                 </div>
@@ -528,19 +527,19 @@ export default function YouWoDemo({
                     initial={{ opacity: 0, y: 8 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={spring}
-                    className="flex gap-2"
+                    className="flex gap-2.5"
                   >
                     {/* Avatar */}
-                    <div className="w-6 h-6 rounded-full flex items-center justify-center shrink-0 bg-accent/15 mt-0.5">
-                      <span className="text-accent text-[8px]">AI</span>
+                    <div className="w-7 h-7 rounded-full flex items-center justify-center shrink-0 bg-accent/15 mt-0.5">
+                      <span className="text-accent text-[10px] font-bold">AI</span>
                     </div>
                     {/* Bubble */}
-                    <div className="flex-1 px-3 py-2 rounded-2xl rounded-bl-md border border-border bg-surface min-w-0">
-                      <p className="text-[10px] text-foreground/90 leading-relaxed break-words">
+                    <div className="flex-1 px-4 py-2.5 rounded-2xl rounded-bl-md border border-border bg-surface min-w-0">
+                      <p className="text-[11px] text-foreground/90 leading-relaxed break-words">
                         {renderStream()}
                         {isStreaming && (
                           <motion.span
-                            className="inline-block w-0.5 h-2.5 bg-accent ml-0.5 align-middle"
+                            className="inline-block w-0.5 h-3 bg-accent ml-0.5 align-middle"
                             animate={{ opacity: [1, 0] }}
                             transition={{
                               duration: 0.5,
