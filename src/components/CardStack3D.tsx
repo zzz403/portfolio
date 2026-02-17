@@ -18,13 +18,7 @@ interface CardStack3DProps {
 }
 
 function getProjectHref(project: Project): string {
-  if (project.url) return project.url;
-  if (project.github) return project.github;
   return `/projects/${project.slug}`;
-}
-
-function isExternal(project: Project): boolean {
-  return Boolean(project.url || project.github);
 }
 
 export default function CardStack3D({ projects }: CardStack3DProps) {
@@ -146,106 +140,79 @@ function CardFace({
   isHovered: boolean;
 }) {
   const href = getProjectHref(project);
-  const external = isExternal(project);
-
-  const content = (
-    <div
-      className={`
-        h-[170px] w-[300px] overflow-hidden rounded-lg border p-5
-        flex select-none flex-col justify-between transition-colors duration-200
-        ${isHovered
-          ? "border-accent/50 bg-surface-hover shadow-[0_0_30px_rgba(224,255,0,0.08)]"
-          : "border-border bg-surface"
-        }
-      `}
-      style={{ backfaceVisibility: "hidden" }}
-    >
-      <div>
-        <p
-          className={`truncate text-base font-semibold transition-colors ${isHovered ? "text-accent" : "text-foreground"
-            }`}
-        >
-          {project.title}
-        </p>
-        <p className="mt-1 line-clamp-2 text-xs leading-relaxed text-muted">
-          {project.description}
-        </p>
-      </div>
-      <div className="flex items-center justify-between">
-        <div className="flex gap-1.5">
-          {project.tags.slice(0, 3).map((tag) => (
-            <span
-              key={tag}
-              className="rounded bg-background/50 px-1.5 py-0.5 font-mono text-[10px] text-muted/70"
-            >
-              {tag}
-            </span>
-          ))}
-        </div>
-        <span className="font-mono text-[10px] text-muted/40">
-          {String(index + 1).padStart(2, "0")}/{String(total).padStart(2, "0")}
-        </span>
-      </div>
-    </div>
-  );
-
-  if (external) {
-    return (
-      <a
-        href={href}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="block cursor-pointer"
-      >
-        {content}
-      </a>
-    );
-  }
 
   return (
     <Link href={href} className="block cursor-pointer">
-      {content}
+      <div
+        className={`
+          h-[170px] w-[300px] overflow-hidden rounded-lg border p-5
+          flex select-none flex-col justify-between transition-colors duration-200
+          ${isHovered
+            ? "border-accent/50 bg-surface-hover shadow-[0_0_30px_rgba(224,255,0,0.08)]"
+            : "border-border bg-surface"
+          }
+        `}
+        style={{ backfaceVisibility: "hidden" }}
+      >
+        <div>
+          <p
+            className={`truncate text-base font-semibold transition-colors ${isHovered ? "text-accent" : "text-foreground"
+              }`}
+          >
+            {project.title}
+          </p>
+          <p className="mt-1 line-clamp-2 text-xs leading-relaxed text-muted">
+            {project.description}
+          </p>
+        </div>
+        <div className="flex items-center justify-between">
+          <div className="flex gap-1.5">
+            {project.tags.slice(0, 3).map((tag) => (
+              <span
+                key={tag}
+                className="rounded bg-background/50 px-1.5 py-0.5 font-mono text-[10px] text-muted/70"
+              >
+                {tag}
+              </span>
+            ))}
+          </div>
+          <span className="font-mono text-[10px] text-muted/40">
+            {String(index + 1).padStart(2, "0")}/{String(total).padStart(2, "0")}
+          </span>
+        </div>
+      </div>
     </Link>
   );
 }
 
 function MobileCard({ project }: { project: Project }) {
   const href = getProjectHref(project);
-  const external = isExternal(project);
 
-  const content = (
-    <div className="rounded-lg border border-border bg-surface p-5 transition-colors hover:border-accent/30 hover:bg-surface-hover">
-      <div className="flex items-start justify-between">
-        <div className="min-w-0 flex-1">
-          <h3 className="truncate text-base font-semibold text-foreground">
-            {project.title}
-          </h3>
-          <p className="mt-1 line-clamp-2 text-xs text-muted">
-            {project.description}
-          </p>
+  return (
+    <Link href={href}>
+      <div className="rounded-lg border border-border bg-surface p-5 transition-colors hover:border-accent/30 hover:bg-surface-hover">
+        <div className="flex items-start justify-between">
+          <div className="min-w-0 flex-1">
+            <h3 className="truncate text-base font-semibold text-foreground">
+              {project.title}
+            </h3>
+            <p className="mt-1 line-clamp-2 text-xs text-muted">
+              {project.description}
+            </p>
+          </div>
+          <span className="ml-3 shrink-0 text-sm text-muted">&#8599;</span>
         </div>
-        <span className="ml-3 shrink-0 text-sm text-muted">&#8599;</span>
+        <div className="mt-3 flex flex-wrap gap-1.5">
+          {project.tags.slice(0, 3).map((tag) => (
+            <span
+              key={tag}
+              className="rounded-full border border-border px-2 py-0.5 text-[10px] text-muted"
+            >
+              {tag}
+            </span>
+          ))}
+        </div>
       </div>
-      <div className="mt-3 flex flex-wrap gap-1.5">
-        {project.tags.slice(0, 3).map((tag) => (
-          <span
-            key={tag}
-            className="rounded-full border border-border px-2 py-0.5 text-[10px] text-muted"
-          >
-            {tag}
-          </span>
-        ))}
-      </div>
-    </div>
+    </Link>
   );
-
-  if (external) {
-    return (
-      <a href={href} target="_blank" rel="noopener noreferrer">
-        {content}
-      </a>
-    );
-  }
-
-  return <Link href={href}>{content}</Link>;
 }

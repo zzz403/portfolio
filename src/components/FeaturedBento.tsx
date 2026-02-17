@@ -34,19 +34,6 @@ function CardWrapper({
   className?: string;
   children: React.ReactNode;
 }) {
-  // External URL → <a> with new tab; otherwise → Next.js <Link>
-  if (project.url) {
-    return (
-      <a
-        href={project.url}
-        target="_blank"
-        rel="noopener noreferrer"
-        className={className}
-      >
-        {children}
-      </a>
-    );
-  }
   return (
     <Link href={`/projects/${project.slug}`} className={className}>
       {children}

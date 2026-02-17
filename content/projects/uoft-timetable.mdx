@@ -3,17 +3,28 @@ title: "UofT Timetable"
 description: "A comprehensive timetable planning tool for University of Toronto students. Features course search, conflict detection, and schedule optimization."
 date: "2024-06-01"
 tags: ["React", "Node.js", "Web Scraping"]
+featured: false
 highlight: 5
-github: "https://github.com/august/uoft-timetable"
+github: "https://github.com/UofT-Box/UofT-Timetable-Builder"
 ---
+
+## Why I Built This
+
+UofT's official timetable tool lets you enroll in courses — that's about it. There's no way to compare section combinations, no optimization, and no way to tell if your schedule is actually good until you've manually built it. Every semester I'd spend hours shuffling sections around trying to avoid 8am lectures and two-hour gaps, and I knew there had to be a better way.
 
 ## Overview
 
-A comprehensive timetable planning tool for University of Toronto students with 2,000+ active users.
+UofT Timetable Builder is a schedule planner built for University of Toronto students. Pick your courses, set your preferences — later start times, shorter gaps, fewer campus commutes, an extra day off — and a genetic algorithm generates optimized timetables ranked by your priorities.
 
 ## Key Features
 
-- **Course search** with real-time filtering across all UofT campuses
-- **Conflict detection** that highlights overlapping sections instantly
-- **Schedule optimization** to minimize gaps and commute time
-- **Export** to Google Calendar, iCal, and image formats
+- **Customizable optimization** — weight what matters to you: later starts, minimal gaps, walking distance, or days off. A genetic algorithm searches section combinations and returns the top schedules.
+- **Live course data** — scraped directly from UofT's course pages and updated each semester, covering all three campuses (UTSG, UTM, UTSC).
+- **Conflict-free generation** — only valid, non-overlapping timetables are produced. No manual checking needed.
+- **Share & export** — generate a shareable link or export a polished timetable image for social media.
+
+## Tech Stack
+
+- React + Node.js
+- Genetic algorithm for multi-objective schedule optimization
+- Web scraping pipeline for live UofT course data

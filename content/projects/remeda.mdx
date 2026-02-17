@@ -1,18 +1,33 @@
 ---
 title: "Remeda"
-description: "Exploring how AI can improve diagnostic accuracy and clinical workflows. Focus on reducing physician burnout, shortening appointment times, and streamlining referrals."
+description: "Enterprise-grade clinical AI with built-in guardrails — evidence-based decision support that keeps physicians in control and patient data private."
 date: "2025-06-01"
 tags: ["AI", "Healthcare", "Python", "NLP"]
 highlight: 3
+url: "https://remeda.ai"
 ---
 
 ## Overview
 
-Research project exploring how AI can transform clinical workflows — from intake to diagnosis to referral.
+Remeda is an enterprise-grade clinical decision support platform developed at the University of Toronto, currently in pilot with healthcare teams. The platform provides evidence-based diagnostic recommendations, intelligent triage, and real-time patient analytics.
 
-## Focus Areas
+## My Role: AI Safety & Governance
 
-- **AI-augmented intake forms** that pre-screen patient symptoms before appointments
-- **Automated summarization** of patient history and clinical notes
-- **Intelligent charting support** to reduce documentation burden on physicians
-- **Referral optimization** — matching patients to specialists with shorter wait times
+As technical lead for AI safety, I own the guardrail layer that sits between the AI models and clinical use. Clinical AI isn't a chatbot — a wrong suggestion can mean a missed diagnosis, and an unaudited action can mean a compliance violation. My work ensures the AI amplifies clinical judgement without overstepping.
+
+Specifically, I designed and built:
+
+- **AI boundary enforcement** — defining what the AI is allowed to do and, more importantly, what it is not. Every recommendation requires explicit clinician confirmation before it affects patient care. The AI suggests, the physician decides.
+- **Role-based output scoping** — different roles (physician, nurse, admin) see different data and AI outputs. The AI itself is constrained to the user's permission level, so a nurse and a specialist get different recommendation surfaces.
+- **Audit trail system** — every AI query, recommendation, and clinician response is logged with timestamps and context. Full traceability for compliance reviews and incident investigation.
+- **Data de-identification pipeline** — patient PII is stripped before reaching AI models. Names, IDs, and identifiers never leave the secure environment.
+- **PHIPA & PIPEDA compliance architecture** — end-to-end encryption, local-first data processing, and access controls built to meet Canadian healthcare privacy regulations.
+
+## Platform Capabilities
+
+The broader platform (built by the full team) includes:
+
+- Clinical decision support covering 500+ conditions with 95% diagnostic accuracy
+- Intelligent triage with automated symptom assessment and urgency stratification
+- Real-time population analytics for proactive intervention
+- Drug interaction screening and rare disease pattern recognition

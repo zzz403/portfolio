@@ -48,13 +48,7 @@ function getProjectCategories(project: Project): Category[] {
 }
 
 function getProjectHref(project: Project): string {
-  if (project.url) return project.url;
-  if (project.github) return project.github;
   return `/projects/${project.slug}`;
-}
-
-function isExternal(project: Project): boolean {
-  return Boolean(project.url || project.github);
 }
 
 function formatDate(dateStr: string): string {
@@ -120,53 +114,44 @@ export default function FilterableProjectGrid({
 
 function GridCard({ project, index }: { project: Project; index: number }) {
   const href = getProjectHref(project);
-  const external = isExternal(project);
 
-  const card = (
-    <motion.div
-      layout
-      initial={{ opacity: 0, scale: 0.95 }}
-      animate={{ opacity: 1, scale: 1 }}
-      exit={{ opacity: 0, scale: 0.95 }}
-      transition={{
-        opacity: { duration: 0.2, delay: index * 0.03 },
-        scale: { duration: 0.2, delay: index * 0.03 },
-        layout: { duration: 0.3 },
-      }}
-      className="group rounded-lg border border-border bg-surface p-5 transition-colors duration-200 hover:border-accent/30 hover:bg-surface-hover"
-      whileHover={{ y: -3 }}
-    >
-      <h3 className="truncate text-base font-semibold text-foreground transition-colors group-hover:text-accent">
-        {project.title}
-      </h3>
-      <p className="mt-1.5 line-clamp-2 text-sm leading-relaxed text-muted">
-        {project.description}
-      </p>
-      <div className="mt-4 flex items-center justify-between">
-        <div className="flex gap-1.5">
-          {project.tags.slice(0, 3).map((tag) => (
-            <span
-              key={tag}
-              className="rounded-full border border-border px-2 py-0.5 font-mono text-[10px] text-muted/70"
-            >
-              {tag}
-            </span>
-          ))}
+  return (
+    <Link href={href}>
+      <motion.div
+        layout
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        exit={{ opacity: 0, scale: 0.95 }}
+        transition={{
+          opacity: { duration: 0.2, delay: index * 0.03 },
+          scale: { duration: 0.2, delay: index * 0.03 },
+          layout: { duration: 0.3 },
+        }}
+        className="group rounded-lg border border-border bg-surface p-5 transition-colors duration-200 hover:border-accent/30 hover:bg-surface-hover"
+        whileHover={{ y: -3 }}
+      >
+        <h3 className="truncate text-base font-semibold text-foreground transition-colors group-hover:text-accent">
+          {project.title}
+        </h3>
+        <p className="mt-1.5 line-clamp-2 text-sm leading-relaxed text-muted">
+          {project.description}
+        </p>
+        <div className="mt-4 flex items-center justify-between">
+          <div className="flex gap-1.5">
+            {project.tags.slice(0, 3).map((tag) => (
+              <span
+                key={tag}
+                className="rounded-full border border-border px-2 py-0.5 font-mono text-[10px] text-muted/70"
+              >
+                {tag}
+              </span>
+            ))}
+          </div>
+          <span className="shrink-0 font-mono text-[10px] text-muted/40">
+            {formatDate(project.date)}
+          </span>
         </div>
-        <span className="shrink-0 font-mono text-[10px] text-muted/40">
-          {formatDate(project.date)}
-        </span>
-      </div>
-    </motion.div>
+      </motion.div>
+    </Link>
   );
-
-  if (external) {
-    return (
-      <a href={href} target="_blank" rel="noopener noreferrer">
-        {card}
-      </a>
-    );
-  }
-
-  return <Link href={href}>{card}</Link>;
 }

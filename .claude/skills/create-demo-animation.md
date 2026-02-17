@@ -261,6 +261,23 @@ transition={{ duration: 1.5, repeat: Infinity, repeatDelay: index * 0.15, ease: 
 
 ---
 
+## Placement: FeaturedBento vs ProjectDemo
+
+Demos can live in two places:
+
+| Placement | When to Use | Registration |
+|-----------|-------------|-------------|
+| **FeaturedBento** (projects listing page) | Flagship projects shown on the main `/projects` page | Import + add to `demoMap` in `FeaturedBento.tsx`, set `featured: true` in MDX |
+| **ProjectDemo** (detail page only) | Secondary projects that deserve a demo but aren't featured | Add dynamic import to `demoMap` in `ProjectDemo.tsx`, keep `featured: false` in MDX |
+
+`ProjectDemo.tsx` uses `next/dynamic` for lazy loading:
+```tsx
+const demoMap: Record<string, React.ComponentType> = {
+  youwoai: dynamic(() => import("./demos/YouWoDemo")),
+  "uoft-timetable": dynamic(() => import("./demos/TimetableDemo")),
+};
+```
+
 ## Step-by-Step: Creating a New Demo
 
 1. **Create file**: `src/components/demos/MyProjectDemo.tsx`
@@ -270,9 +287,21 @@ transition={{ duration: 1.5, repeat: Infinity, repeatDelay: index * 0.15, ease: 
 5. **Implement component**: Use boilerplate above. Include `"use client"` directive.
 6. **Write `run()` function**: Async sequence. Every `wait()` must be checked: `if (!(await wait(ms))) return;`
 7. **Build JSX**: Use `AnimatePresence` for enter/exit. Phase-derived booleans for conditionals.
-8. **Register in FeaturedBento**: Add import + entry in `demoMap` in `src/components/FeaturedBento.tsx`. Slug must match MDX filename.
-9. **Update MDX**: Set `featured: true` in frontmatter of `content/projects/<slug>.mdx`.
+8. **Register**: Either in `FeaturedBento.tsx` (featured) or `ProjectDemo.tsx` (detail page only). Slug must match MDX filename.
+9. **Update MDX**: Set `featured: true` (if FeaturedBento) in frontmatter of `content/projects/<slug>.mdx`.
 10. **Test**: `npm run dev` (plays on scroll), hover to replay, `npm run build` (no TS errors).
+
+## Design Lessons
+
+1. **Plan the narrative first, code second**: Before writing any code, decide what story the demo tells. Ask: "What is the ONE thing this product does that's special?" and build the animation around that. For TimetableDemo the answer was "customizable optimization" — so the entire demo revolves around preference chips transforming the schedule.
+2. **Discuss the design with the user iteratively**: Present the animation concept (phases, layout, visual elements) as a written plan BEFORE coding. The user may redirect the core concept entirely (e.g., sliders → floating chips), which is much cheaper to change at the plan stage.
+3. **Keep UI elements large enough to read**: At demo scale, sliders/small controls become invisible. Prefer large, bold visual metaphors (floating chips, big cards, centered overlays) over miniaturized real UI (sliders, dropdowns, tiny buttons). Minimum readable sizes:
+   - Floating overlays/chips: `text-sm` (14px) for labels, `text-xl` for icons
+   - Completed badges: `text-[10px]` minimum, `px-2.5 py-1`
+   - Course blocks / grid labels: `text-[8px]` for primary, `text-[6px]` for secondary
+4. **Center important elements**: Floating elements (pref chips, modals) should use `absolute inset-0 flex items-center justify-center` to be centered in the demo area, not positioned with percentage offsets which are hard to get right.
+5. **Make each transition causally obvious**: Every layout change must have a clear visual trigger. A chip flies in → the grid rearranges. If a transition only moves one block slightly, it's not convincing — add more data (e.g., a 4th course) to make the change dramatic.
+6. **Data must be realistic**: Layout transitions should reflect real-world logic. "Fri Off" should redistribute Friday's course to Mon–Thu, not just delete it. "Short Gaps" needs visible gaps to close — if courses are on separate days, there's no gap to see.
 
 ## Common Pitfalls
 
@@ -280,7 +309,7 @@ transition={{ duration: 1.5, repeat: Infinity, repeatDelay: index * 0.15, ease: 
 2. **Missing cancellation checks** in loops: Every for-loop iteration needs `if (cancelled.current) return;`
 3. **Missing wait() checks**: Every `wait()` must be wrapped: `if (!(await wait(ms))) return;`
 4. **onComplete in deps**: Use `onCompleteRef` pattern — never put `onComplete` in `run()`'s useCallback deps.
-5. **Text sizes**: Demos are miniaturized. Use `text-[7px]` to `text-[10px]`. Max `text-xs` (12px) for primary.
+5. **Text sizes**: Demos are miniaturized. Use `text-[7px]` to `text-[10px]`. Max `text-xs` (12px) for grid content. Floating overlays can go up to `text-sm` / `text-xl` for icons.
 6. **Colors**: Use design tokens (`accent`, `muted`, `foreground`, `border`, `surface`). Project-specific hex with opacity suffixes (`#e06c7520`).
 7. **NEVER hardcode dark-mode colors** (e.g., `bg-[#0a0a0a]`, `bg-[#141414]`, `border-[#222]`). The site supports dark/light theme switching via `.dark` / `.light` CSS classes. Always use Tailwind theme classes or `var(--token)` for inline styles:
 
@@ -300,10 +329,12 @@ transition={{ duration: 1.5, repeat: Infinity, repeatDelay: index * 0.15, ease: 
 
 | File | Purpose |
 |------|---------|
-| `src/components/FeaturedBento.tsx` | Card grid + demoMap + replay orchestration |
+| `src/components/FeaturedBento.tsx` | Card grid + demoMap + replay orchestration (featured projects) |
+| `src/components/ProjectDemo.tsx` | Dynamic demo loader for project detail pages |
 | `src/components/demos/DemoShell.tsx` | Reusable wrapper (title bar + useInView + replay) |
 | `src/components/demos/YouWoDemo.tsx` | YouWo AI demo (self-managed, reference impl) |
 | `src/components/demos/OpenBrowserDemo.tsx` | OpenBrowser AI demo (self-managed, reference impl) |
+| `src/components/demos/TimetableDemo.tsx` | UofT Timetable demo (self-managed, floating chips + grid layout) |
 | `src/components/demos/ChatDemo.tsx` | Chat demo (DemoShell-wrapped, simple reference) |
 | `src/components/demos/CanvasDemo.tsx` | Generative art demo (DemoShell-wrapped) |
 | `src/components/demos/EditorDemo.tsx` | Editor demo (DemoShell-wrapped) |

@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { MDXRemote } from "next-mdx-remote-client/rsc";
 import { getAllProjects, getProjectBySlug } from "@/lib/projects";
+import ProjectDemo from "@/components/ProjectDemo";
 
 export function generateStaticParams() {
   return getAllProjects().map((p) => ({ slug: p.slug }));
@@ -16,7 +17,7 @@ export async function generateMetadata({
   const project = getProjectBySlug(slug);
   if (!project) return { title: "Not Found" };
   return {
-    title: `${project.title} — August`,
+    title: project.title,
     description: project.description,
   };
 }
@@ -73,6 +74,10 @@ export default async function ProjectPage({
             </a>
           )}
         </div>
+
+        {/* Demo animation for featured projects */}
+        <ProjectDemo slug={project.slug} />
+
         <hr className="my-10 border-border" />
         <div className="prose">
           <MDXRemote source={project.content} />
