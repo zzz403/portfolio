@@ -1,19 +1,29 @@
 ---
 title: "KOKO"
-description: "A voice-first, tap-less platform designed for older adults. Helps seniors connect within and across communities, making digital communication simpler and warmer."
+description: "A voice-first platform for older adults, powered by an AI agent that bridges multiple messaging apps — currently piloted in nursing homes across Ontario."
 date: "2024-03-01"
-tags: ["React", "Node.js", "WebRTC", "Voice Tech"]
+tags: ["React", "Node.js", "AI Agent", "Voice Tech", "WebRTC"]
 highlight: 4
-url: "https://koko.social"
+
 ---
 
 ## Overview
 
-KOKO is a voice-first social platform built to make digital communication accessible and warm for older adults. Co-founded and developed from the ground up.
+KOKO is a voice-first communication platform designed for older adults. At its core is an AI agent that works across messaging apps — WeChat, WhatsApp, iMessage — so seniors can reach anyone without learning a new tool. I led the full-stack development as part of our startup course at UofT.
 
-## Key Features
+Currently being piloted and tested at multiple nursing homes across Ontario.
 
-- **Voice-first interface** — no typing required, fully tap-less interaction
-- **Community circles** — connect seniors within neighborhoods and interest groups
-- **Cross-community bridges** — facilitate inter-generational and cross-community connections
-- **WebRTC-powered** real-time voice with low latency and high reliability
+## Voice-First Interaction
+
+Seniors don't type — they speak. KOKO's interface is fully tap-less: users hold a single button and say what they want. The AI agent interprets intent, routes messages to the right contact on the right platform, and reads replies back aloud.
+
+## Cross-Platform AI Agent
+
+The hardest problem KOKO solves is fragmentation. A senior's family might use WeChat, their neighbor uses WhatsApp, their doctor's office uses SMS. KOKO's agent sits in the middle — a unified conversational layer that sends and receives messages across all these channels on behalf of the user.
+
+## Architecture
+
+- **Voice pipeline** — WebRTC capture → speech-to-text → intent classification → action execution → text-to-speech response
+- **Agent orchestration** — central message broker that maintains per-user conversation state across platforms
+- **Platform adapters** — modular connectors for each messaging service (WeChat, WhatsApp, iMessage, SMS)
+- **React frontend** — minimal, high-contrast UI optimized for accessibility and low vision

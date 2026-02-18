@@ -7,6 +7,7 @@ const demoMap: Record<string, React.ComponentType> = {
   "openbrowser-ai": dynamic(() => import("./demos/OpenBrowserDemo")),
   "uoft-timetable": dynamic(() => import("./demos/TimetableDemo")),
   remeda: dynamic(() => import("./demos/RemedaDemo")),
+  koko: dynamic(() => import("./demos/KokoDemo")),
 };
 
 export default function ProjectDemo({ slug }: { slug: string }) {
