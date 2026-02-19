@@ -1,18 +1,28 @@
 ---
-title: "ChatGPT Enhancement Extension"
-description: "A browser extension that enhances ChatGPT with additional features like conversation export, custom prompts, and improved formatting."
+title: "ChatGPT Booster"
+description: "A Chrome extension with 9 power-user modules for ChatGPT — from auto-hiding old messages to PDF export, screenshot capture, and prompt shortcuts."
 date: "2023-09-01"
-tags: ["JavaScript", "Chrome API", "CSS"]
-github: "https://github.com/august/chatgpt-extension"
+tags: ["Chrome Extension", "ChatGPT", "Productivity", "Modular Architecture"]
+url: "https://chromewebstore.google.com/detail/chatgpt-booster/dijndfhpfobbjpmeddjgagpgmeooimje"
+github: "https://github.com/zzz403/Chatgpt-Booster"
 ---
 
 ## Overview
 
-A Chrome extension with 500+ downloads that adds power-user features to ChatGPT.
+While using ChatGPT daily for learning and development, I kept running into the same friction points — no way to export conversations, math formulas impossible to copy, long threads becoming unreadable. Instead of waiting for OpenAI to fix them, I built an all-in-one extension that fills every gap I encountered. What started as a quick script grew into 9 feature modules, now refactored into a clean modular architecture.
 
-## Key Features
+## Features
 
-- **Conversation export** to Markdown, PDF, and plain text
-- **Custom prompt library** with quick-insert shortcuts
-- **Improved formatting** with syntax highlighting and better code blocks
-- **Keyboard shortcuts** for faster navigation and interaction
+- **Auto-hide old messages** — collapses older messages in long conversations, restores on scroll-up
+- **LaTeX copy** — click any formula to copy raw `$$ LaTeX $$` syntax
+- **Collapse/expand replies** — fold lengthy responses with one click
+- **Screenshot capture** — render and capture conversation segments
+- **Prompt replace** — trigger-word shortcuts that auto-expand into preset prompts
+- **PDF export** — export full conversations as formatted PDF
+- **Image copy** — render any message as an image and copy to clipboard
+- **Floating ball** — conversation binding and quick-jump navigation
+- **Multi-language** — i18n support for English, Chinese, Japanese, Korean
+
+## Architecture
+
+Modular content-script injection via Manifest v3 — 12 modules loaded in dependency order, each exporting through a `window.Booster*` namespace. MutationObserver watches for DOM changes to inject features as ChatGPT renders new content.

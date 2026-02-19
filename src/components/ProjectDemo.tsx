@@ -9,6 +9,7 @@ const demoMap: Record<string, React.ComponentType> = {
   remeda: dynamic(() => import("./demos/RemedaDemo")),
   koko: dynamic(() => import("./demos/KokoDemo")),
   "campus-forum": dynamic(() => import("./demos/CampusForumDemo")),
+  "chatgpt-extension": dynamic(() => import("./demos/ChatGPTBoosterDemo")),
 };
 
 export default function ProjectDemo({ slug }: { slug: string }) {

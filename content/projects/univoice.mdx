@@ -1,0 +1,29 @@
+---
+title: "UniVoice"
+description: "A unified speech foundation model for real-time voice interaction — built in collaboration with the Vector Institute. Combines low-cost ASR with LLM-based correction to achieve better accuracy at lower cost, with support for multilingual, multi-accent, and multi-speaker scenarios."
+date: "2026-01-01"
+tags: ["Python", "Speech Recognition", "LLM", "NLP", "Research"]
+---
+
+## Overview
+
+UniVoice is a research project in collaboration with the **Vector Institute** focused on building a unified speech foundation model purpose-built for real-time voice interaction. The core insight: pairing a lightweight, low-cost automatic speech recognition (ASR) system with a low-cost LLM correction layer can produce a system that is both cheaper and more accurate than existing high-cost monolithic solutions.
+
+## The Core Idea
+
+Current state-of-the-art voice systems face a tradeoff — high accuracy requires expensive models, while cheap models produce too many errors to be useful. UniVoice breaks this tradeoff by treating ASR and language understanding as complementary stages:
+
+1. **Low-cost ASR** transcribes speech quickly and cheaply, even if imperfectly
+2. **LLM correction layer** uses linguistic context to fix transcription errors in real time
+3. The combined system achieves accuracy comparable to expensive end-to-end models at a fraction of the cost
+
+## Research Directions
+
+- **Multilingual** — unified model that handles multiple languages without separate per-language models
+- **Multi-accent** — robust transcription across regional accents and non-native speakers
+- **Multi-speaker** — accurate diarization and transcription in conversations with multiple participants
+- **Real-time optimization** — latency-aware architecture designed for live voice interaction, not batch processing
+
+## Status
+
+Early-stage research project, started January 2026, in active collaboration with the Vector Institute.
