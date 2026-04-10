@@ -645,8 +645,21 @@ export default function STA313A3Page() {
       <section className="max-w-[680px] mx-auto px-6 mt-16 mb-12">
         <h2 className="font-serif text-2xl mb-6" style={{ letterSpacing: "-0.01em" }}>What the Original Got Wrong</h2>
 
+        {/* Original NYT spiral */}
+        <figure className="mb-8">
+          <div className="bg-[#f9f5f0] rounded-lg p-6 flex justify-center">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/sta313a3_original.png" alt="Original NYT spiral chart of COVID-19 cases" className="max-w-[420px] w-full" />
+          </div>
+          <figcaption className="text-xs text-muted font-mono mt-3 text-center">
+            The original spiral chart, published Jan. 6, 2022 in <em>The New York Times</em>.
+            Graphics by Gus Wezerek and Sara Chodosh.
+            {" "}<a href="https://www.nytimes.com/2022/01/06/opinion/omicron-covid-us.html" target="_blank" rel="noopener noreferrer" className="text-accent hover:underline">Source</a>
+          </figcaption>
+        </figure>
+
         <p className="text-[15px] leading-relaxed mb-4">
-          The NYT spiral is an author-driven narrative designed for maximum viral impact.
+          The spiral was an author-driven narrative designed for maximum viral impact.
           And it worked: the image circulated widely on social media, instantly communicating
           the Omicron surge&rsquo;s scale. But several design choices undermine accurate reading:
         </p>
