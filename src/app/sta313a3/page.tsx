@@ -326,31 +326,51 @@ export default function STA313A3Page() {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <div className="max-w-[900px] mx-auto px-6 py-16">
-        {/* Header */}
-        <header className="mb-12">
-          <p className="text-muted font-mono text-xs tracking-widest uppercase mb-3">
-            STA313 &middot; Assignment 3 &middot; Redesign
-          </p>
-          <h1 className="text-3xl md:text-4xl font-serif font-normal tracking-tight mb-4" style={{ lineHeight: 1.15 }}>
-            Interactive COVID-19 Spiral
-          </h1>
-          <p className="text-muted text-sm leading-relaxed max-w-[620px]">
-            A redesign of <span className="text-foreground">The New York Times&rsquo; spiral chart</span>.
-            Instead of encoding case counts as radial distance (which distorts magnitudes on inner rings),
-            this spiral heatmap uses <span className="text-foreground">color intensity</span> as
-            the primary channel for magnitude, eliminating geometric distortion while preserving
-            the spiral&rsquo;s temporal structure. Interactivity addresses lookup, comparison,
-            and severity-context limitations.
-          </p>
-        </header>
+      {/* ── HERO ── */}
+      <header className="max-w-[680px] mx-auto px-6 pt-20 pb-12">
+        <p className="text-muted font-mono text-[11px] tracking-widest uppercase mb-6">
+          Opinion &middot; Interactive &middot; Jan. 6, 2022
+        </p>
+        <h1 className="font-serif text-4xl md:text-5xl font-normal mb-6" style={{ lineHeight: 1.12, letterSpacing: "-0.01em" }}>
+          The Omicron Spiral, Redesigned
+        </h1>
+        <p className="text-muted text-lg leading-relaxed font-serif italic mb-8">
+          A new way to read the pandemic&rsquo;s most dramatic chart: same spiral, honest encoding, full context.
+        </p>
+        <div className="flex items-center gap-3 text-sm text-muted border-t border-border pt-5">
+          <span className="font-mono text-xs">STA313 Assignment 3 &middot; Design Critique &amp; Redesign</span>
+        </div>
+      </header>
 
-        {/* Chart */}
+      {/* ── LEDE ── */}
+      <section className="max-w-[680px] mx-auto px-6 mb-12">
+        <p className="text-[15px] leading-relaxed mb-4">
+          On January 6, 2022, <em>The New York Times</em> published an opinion piece
+          by epidemiologist Jeffrey Shaman titled &ldquo;Here&rsquo;s When We Expect Omicron to Peak.&rdquo;
+          At its center was a spiral chart of daily COVID-19 cases in the United States, designed
+          by Gus Wezerek and Sara Chodosh. The Omicron spike burst outward from the spiral like nothing before it,
+          instantly conveying one message: <strong>this wave is unprecedented</strong>.
+        </p>
+        <p className="text-[15px] leading-relaxed mb-4">
+          The spiral was brilliant and flawed. Its radial layout systematically exaggerated later data,
+          its geometry implied a cyclicality the pandemic never had, and it showed only case counts,
+          omitting the crucial context that Omicron&rsquo;s record cases did not produce a proportional
+          hospitalization surge.
+        </p>
+        <p className="text-[15px] leading-relaxed">
+          Below is a redesign that preserves what made the original compelling while fixing what made it misleading.
+          Instead of encoding magnitude as <em>radial distance</em> (which distorts across rings),
+          this version uses a <strong>sequential color scale</strong>: every segment is the same width,
+          and intensity alone carries the signal. Hover, click, and toggle to explore.
+        </p>
+      </section>
+
+      {/* ── MAIN CHART ── */}
+      <div className="max-w-[900px] mx-auto px-6 mb-6">
         <div className="relative bg-surface rounded-lg border border-border overflow-hidden">
           {/* Controls */}
           <div className="flex items-center gap-4 px-5 py-3 border-b border-border">
             <Toggle label="Hospitalizations" active={showHosp} onToggle={() => setShowHosp(!showHosp)} color="#5b9bd5" />
-            <Toggle label={isLinear ? "Spiral view" : "Linear view"} active={isLinear} onToggle={() => setIsLinear(!isLinear)} color="var(--accent)" />
             {comparePoints.length > 0 && (
               <button onClick={() => setComparePoints([])} className="ml-auto text-xs text-muted hover:text-foreground transition-colors cursor-pointer">
                 Clear markers
@@ -619,23 +639,136 @@ export default function STA313A3Page() {
           )}
         </AnimatePresence>
 
-        {/* Interaction Guide */}
-        <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-4">
-          <Card title="Hover" desc="Move cursor over the spiral to see exact date, case count, and hospitalization values. Color intensity encodes magnitude without radial distortion."
-            fix="Fixes: lookup task limitation (Shneiderman: details on demand)" />
-          <Card title="Click to Compare" desc="Click two segments to place markers A and B. A comparison panel shows side-by-side statistics and magnitude ratios."
-            fix="Fixes: cross-year comparison (Gestalt proximity)" />
-          <Card title="Hospitalization Toggle" desc="A second color band (blue) appears alongside the case band. During Omicron, the case band turns deep red while the hospitalization band stays moderate blue."
-            fix="Fixes: not enlightening (missing severity context)" />
-          <Card title="Linear View Toggle" desc="Switch to a linear time-series for precise quantitative reading using position on a common aligned scale."
-            fix="Fixes: radial encoding ranked lower than linear position (Cleveland & McGill)" />
-        </div>
-
-        <p className="mt-12 text-xs text-muted font-mono text-center leading-relaxed">
-          Data is synthetic but modeled on US COVID-19 case and hospitalization patterns (Our World in Data).<br />
-          Built as a redesign proposal for STA313 Assignment 3.
-        </p>
       </div>
+
+      {/* ── SECTION: What the original got wrong ── */}
+      <section className="max-w-[680px] mx-auto px-6 mt-16 mb-12">
+        <h2 className="font-serif text-2xl mb-6" style={{ letterSpacing: "-0.01em" }}>What the Original Got Wrong</h2>
+
+        <p className="text-[15px] leading-relaxed mb-4">
+          The NYT spiral is an author-driven narrative designed for maximum viral impact.
+          And it worked: the image circulated widely on social media, instantly communicating
+          the Omicron surge&rsquo;s scale. But several design choices undermine accurate reading:
+        </p>
+
+        <div className="border-l-2 border-[#e8927c] pl-5 mb-6 space-y-4">
+          <div>
+            <p className="text-sm font-semibold mb-1">Geometric distortion</p>
+            <p className="text-sm text-muted leading-relaxed">
+              Outer rings have greater arc length than inner rings for the same angular span.
+              A wave on the 2021 ring appears physically larger than an identical wave on the 2020 ring,
+              even if the underlying case counts are the same. This violates what Cleveland and McGill
+              identified as a fundamental principle: radial distance is a weak channel for quantitative comparison.
+            </p>
+          </div>
+          <div>
+            <p className="text-sm font-semibold mb-1">False cyclicality</p>
+            <p className="text-sm text-muted leading-relaxed">
+              A spiral implies periodicity. But the pandemic&rsquo;s trajectory was shaped by variant emergence
+              and policy decisions, not by a repeating annual cycle. The layout violates Munzner&rsquo;s
+              expressiveness principle: the visual structure suggests a pattern the data does not contain.
+            </p>
+          </div>
+          <div>
+            <p className="text-sm font-semibold mb-1">Missing severity context</p>
+            <p className="text-sm text-muted leading-relaxed">
+              Shaman&rsquo;s article explicitly discussed hospitalization rates, noting that
+              &ldquo;if twice as many people become infected but these people are half as likely to be hospitalized,
+              the demand for hospital beds would be the same.&rdquo; The spiral shows none of this nuance.
+              Its explosive protrusion conveys alarm, potentially biasing readers toward disproportionate panic.
+            </p>
+          </div>
+          <div>
+            <p className="text-sm font-semibold mb-1">No interaction</p>
+            <p className="text-sm text-muted leading-relaxed">
+              The static format makes it impossible to look up exact values, compare specific dates across years,
+              or explore the data at your own pace. Cross-year comparison (e.g., July 2020 vs. July 2021)
+              requires mentally aligning data at different radii, violating the Gestalt principle of proximity.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* ── SECTION: How the redesign works ── */}
+      <section className="max-w-[680px] mx-auto px-6 mb-12">
+        <h2 className="font-serif text-2xl mb-6" style={{ letterSpacing: "-0.01em" }}>How the Redesign Works</h2>
+
+        <p className="text-[15px] leading-relaxed mb-4">
+          The redesign keeps the spiral&rsquo;s temporal structure (one revolution per year, January at the top)
+          and its visual drama (Omicron still stands out immediately). But it replaces the encoding that caused
+          the distortion: instead of radial distance, magnitude is encoded as <strong>color intensity</strong> on
+          equal-width segments. Inner and outer rings are now directly comparable.
+        </p>
+
+        <p className="text-[15px] leading-relaxed mb-6">
+          Three interaction features address the limitations identified above:
+        </p>
+
+        <div className="space-y-5 mb-8">
+          <div className="bg-surface border border-border rounded-lg px-5 py-4">
+            <p className="text-sm font-semibold mb-1">Hover: cross-year comparison</p>
+            <p className="text-sm text-muted leading-relaxed">
+              Move your cursor over any segment. The same calendar date is highlighted on <em>all three rings</em>,
+              and a tooltip shows the exact case count and hospitalization number for 2020, 2021, and 2022 side by side.
+              No mental alignment needed.
+            </p>
+            <p className="text-[11px] font-mono text-accent mt-2 opacity-70">Addresses: Gestalt proximity violation, Shneiderman&rsquo;s details on demand</p>
+          </div>
+          <div className="bg-surface border border-border rounded-lg px-5 py-4">
+            <p className="text-sm font-semibold mb-1">Click to compare</p>
+            <p className="text-sm text-muted leading-relaxed">
+              Click any two points to place markers A and B. A comparison panel appears with side-by-side statistics
+              and magnitude ratios, supporting the lookup and compare tasks that Munzner&rsquo;s framework identifies
+              as poorly supported by radial layouts.
+            </p>
+            <p className="text-[11px] font-mono text-accent mt-2 opacity-70">Addresses: poor lookup/compare support in radial encoding</p>
+          </div>
+          <div className="bg-surface border border-border rounded-lg px-5 py-4">
+            <p className="text-sm font-semibold mb-1">Hospitalization toggle</p>
+            <p className="text-sm text-muted leading-relaxed">
+              Toggle the blue band to overlay hospitalization data alongside cases. During Omicron,
+              the case band turns deep red while hospitalizations remain moderate blue,
+              making the severity decoupling visually self-evident.
+              The red/blue contrast was chosen for semantic clarity and accessibility under common color vision deficiencies.
+            </p>
+            <p className="text-[11px] font-mono text-accent mt-2 opacity-70">Addresses: Cairo&rsquo;s &ldquo;enlightenment&rdquo; dimension</p>
+          </div>
+        </div>
+      </section>
+
+      {/* ── SECTION: Trade-offs ── */}
+      <section className="max-w-[680px] mx-auto px-6 mb-12">
+        <h2 className="font-serif text-2xl mb-6" style={{ letterSpacing: "-0.01em" }}>Trade-offs</h2>
+        <p className="text-[15px] leading-relaxed mb-4">
+          Color encoding also ranks below position on Cleveland and McGill&rsquo;s effectiveness hierarchy.
+          Precise magnitude comparison from color alone is difficult. The interaction layer compensates:
+          hovering reveals exact values, so precise judgment does not depend on the color channel alone.
+        </p>
+        <p className="text-[15px] leading-relaxed">
+          The spiral&rsquo;s geometric novelty is preserved rather than discarded.
+          The redesign does not flatten the spiral into a conventional line chart;
+          instead, it fixes the encoding while keeping the form that made the original memorable.
+          The temporal structure, the year-over-year layering, and the visual climax of the Omicron spike
+          are all retained.
+        </p>
+      </section>
+
+      {/* ── FOOTER ── */}
+      <footer className="max-w-[680px] mx-auto px-6 pb-20">
+        <div className="border-t border-border pt-6 space-y-2">
+          <p className="text-xs text-muted font-mono leading-relaxed">
+            Data is synthetic but modeled on U.S. COVID-19 case and hospitalization patterns from Our World in Data.
+          </p>
+          <p className="text-xs text-muted font-mono leading-relaxed">
+            Original visualization: &ldquo;Here&rsquo;s When We Expect Omicron to Peak,&rdquo;
+            by Jeffrey Shaman, with graphics by Gus Wezerek and Sara Chodosh.
+            <em> The New York Times</em>, January 6, 2022.
+          </p>
+          <p className="text-xs text-muted font-mono leading-relaxed">
+            Built as a redesign proposal for STA313 Assignment 3, University of Toronto.
+          </p>
+        </div>
+      </footer>
     </div>
   );
 }
