@@ -146,10 +146,11 @@ function CardFace({
       <div
         className={`
           h-[170px] w-[300px] overflow-hidden rounded-lg border p-5
-          flex select-none flex-col justify-between transition-colors duration-200
+          flex select-none flex-col justify-between
+          transition-[color,background-color,border-color,box-shadow] duration-200
           ${isHovered
-            ? "border-accent/50 bg-surface-hover shadow-[0_0_30px_rgba(224,255,0,0.08)]"
-            : "border-border bg-surface"
+            ? "border-accent/50 bg-surface-hover shadow-card-hover"
+            : "border-border bg-surface shadow-card"
           }
         `}
         style={{ backfaceVisibility: "hidden" }}
@@ -190,7 +191,7 @@ function MobileCard({ project }: { project: Project }) {
 
   return (
     <Link href={href}>
-      <div className="rounded-lg border border-border bg-surface p-5 transition-colors hover:border-accent/30 hover:bg-surface-hover">
+      <div className="rounded-lg border border-border bg-surface p-5 shadow-card transition-[border-color,background-color,box-shadow] hover:border-accent/30 hover:bg-surface-hover">
         <div className="flex items-start justify-between">
           <div className="min-w-0 flex-1">
             <h3 className="truncate text-base font-semibold text-foreground">

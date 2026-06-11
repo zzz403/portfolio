@@ -2,13 +2,11 @@
 
 /* ── Design Tokens ── */
 :root {
-  --font-geist-sans: var(--font-geist-sans);
-  --font-geist-mono: var(--font-geist-mono);
   --font-serif: var(--font-eb-garamond);
   --ease-expo: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* Dark theme (default) */
+/* Dark theme */
 .dark {
   --background: #0f0e17;
   --foreground: #fffffe;
@@ -17,17 +15,33 @@
   --surface: #171625;
   --surface-hover: #1f1e30;
   --border: #2a293d;
+  /* Depth: dark mode reads depth from borders; shadows only on hover lift */
+  --card-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
+  --card-shadow-hover: 0 18px 40px -18px rgba(0, 0, 0, 0.55);
+  --glow-1: rgba(255, 137, 6, 0.05);
+  --glow-2: rgba(59, 130, 246, 0.05);
 }
 
-/* Light theme */
+/* Light theme — warm paper: cream desk, floating ivory cards, raspberry ink */
 .light {
   --background: #fef6e4;
   --foreground: #001858;
-  --muted: #172c66;
-  --accent: #f582ae;
-  --surface: #f3d2c1;
-  --surface-hover: #edd5c8;
-  --border: #d4b8a8;
+  --muted: #41538b;
+  --accent: #d6336c;
+  --surface: #fbeedb;
+  --surface-hover: #fdf4e6;
+  --border: #e6d0ae;
+  /* Depth: layered warm shadows — tight contact + soft key + wide ambient */
+  --card-shadow:
+    0 1px 2px rgba(96, 60, 22, 0.05),
+    0 6px 16px -6px rgba(96, 60, 22, 0.1),
+    0 24px 40px -18px rgba(96, 60, 22, 0.16);
+  --card-shadow-hover:
+    0 2px 4px rgba(96, 60, 22, 0.06),
+    0 12px 28px -8px rgba(96, 60, 22, 0.14),
+    0 36px 64px -20px rgba(96, 60, 22, 0.22);
+  --glow-1: rgba(214, 51, 108, 0.05);
+  --glow-2: rgba(255, 158, 64, 0.07);
 }
 
 @theme inline {
@@ -38,6 +52,8 @@
   --color-surface: var(--surface);
   --color-surface-hover: var(--surface-hover);
   --color-border: var(--border);
+  --shadow-card: var(--card-shadow);
+  --shadow-card-hover: var(--card-shadow-hover);
   --font-sans: var(--font-inter);
   --font-mono: var(--font-geist-mono);
   --font-serif: var(--font-eb-garamond);
@@ -62,6 +78,14 @@ body {
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
+/* Hero ambient glows, tinted per theme */
+.hero-glow-1 {
+  background: var(--glow-1);
+}
+.hero-glow-2 {
+  background: var(--glow-2);
+}
+
 ::selection {
   background: var(--accent);
   color: var(--background);
@@ -70,28 +94,14 @@ body {
 /* ── Hero Typography Utility ── */
 /* ── Nameplate Styles (v7) ── */
 .name-august {
-  font-family: var(--font-serif), serif;
+  /* Clean sans italic — the site is minimal-first; serif read as too ornate */
+  font-family: var(--font-sans), system-ui, sans-serif;
   font-weight: 400;
   font-style: italic;
-  font-size: clamp(3.5rem, 10vw, 8.5rem);
+  font-size: clamp(3.25rem, 8.5vw, 7.5rem);
   line-height: 1.1;
-  /* Increased from 0.85 */
-  letter-spacing: -0.01em;
-  /* Slightly more open */
+  letter-spacing: -0.02em;
   color: var(--foreground);
-}
-
-.name-zheng {
-  font-family: var(--font-sans), sans-serif;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  font-size: 0.45em;
-  margin-left: -0.1em;
-  vertical-align: baseline;
-  color: var(--foreground);
-  position: relative;
-  top: -0.05em;
 }
 
 .technical-label {
@@ -107,17 +117,6 @@ body {
   line-height: 1.2;
   letter-spacing: -0.01em;
   color: var(--foreground);
-}
-
-.last-name-text {
-  color: #888;
-  margin-left: 0.4em;
-  font-weight: 300;
-  opacity: 0.8;
-}
-
-.name-glow {
-  text-shadow: 0 0 40px rgba(255, 255, 255, 0.1);
 }
 
 /* Invert hero line art in light mode */

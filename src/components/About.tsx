@@ -9,14 +9,16 @@ export default function About() {
         </ScrollReveal>
         <ScrollReveal delay={0.1}>
           <h2 className="text-3xl font-medium tracking-tight md:text-4xl lg:text-5xl max-w-3xl leading-[1.15]">
-            Architecting the foundations of <span className="italic font-serif">modern intelligence.</span>
+            Useful first. <span className="italic">Reliable always.</span>
           </h2>
         </ScrollReveal>
         <ScrollReveal delay={0.2}>
           <p className="mt-8 max-w-xl text-muted text-xl leading-relaxed">
-            I specialize in building reliable AI infrastructure and high-performance systems.
-            My work bridges the gap between complex research and production-grade reliability,
-            ensuring that intelligence scales without compromise.
+            The AI world doesn&apos;t need another demo. I build systems meant
+            to be used: ones that solve a real problem, cite their sources,
+            and behave the same on the thousandth request as on the first.
+            Currently at IBM watsonx; previously Vector Institute, and a
+            founding role at YouWoAI.
           </p>
         </ScrollReveal>
       </div>

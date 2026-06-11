@@ -1,30 +1,41 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useSyncExternalStore } from "react";
 import { motion } from "framer-motion";
 
-export default function ThemeToggle() {
-  const [theme, setTheme] = useState<"dark" | "light">("dark");
-  const [mounted, setMounted] = useState(false);
+type Theme = "dark" | "light";
 
-  useEffect(() => {
-    setMounted(true);
-    const saved = localStorage.getItem("theme") as "dark" | "light" | null;
-    if (saved) {
-      setTheme(saved);
-      document.documentElement.className = saved;
-    }
-  }, []);
+// The <html> class list is the source of truth (set by the inline script in
+// layout.tsx before hydration), so model it as an external store.
+function subscribe(callback: () => void) {
+  const observer = new MutationObserver(callback);
+  observer.observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ["class"],
+  });
+  return () => observer.disconnect();
+}
+
+function getSnapshot(): Theme {
+  return document.documentElement.classList.contains("dark")
+    ? "dark"
+    : "light";
+}
+
+function getServerSnapshot(): Theme {
+  return "light";
+}
+
+export default function ThemeToggle() {
+  const theme = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
 
   function toggle() {
-    const next = theme === "dark" ? "light" : "dark";
-    setTheme(next);
-    document.documentElement.className = next;
+    const next: Theme = theme === "dark" ? "light" : "dark";
+    const c = document.documentElement.classList;
+    c.remove("light", "dark");
+    c.add(next);
     localStorage.setItem("theme", next);
   }
-
-  // Avoid hydration mismatch
-  if (!mounted) return <div className="w-9 h-5" />;
 
   return (
     <button

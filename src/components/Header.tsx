@@ -16,14 +16,14 @@ export default function Header() {
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 backdrop-blur-md bg-background/80 border-b border-border">
-      <nav className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
+      <nav className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-4 sm:px-6">
         <Link
           href="/"
           className="font-mono text-sm tracking-tight text-foreground transition-colors hover:text-accent"
         >
           august
         </Link>
-        <ul className="flex items-center gap-6">
+        <ul className="flex items-center gap-4 sm:gap-6">
           {navItems.map((item) => {
             const isActive =
               item.href.startsWith("/#")
@@ -33,10 +33,13 @@ export default function Header() {
                   : pathname.startsWith(item.href);
 
             return (
-              <li key={item.label}>
+              <li
+                key={item.label}
+                className={item.href === "/" ? "hidden sm:block" : ""}
+              >
                 <Link
                   href={item.href}
-                  className={`font-mono text-sm transition-colors hover:text-accent ${
+                  className={`font-mono text-xs transition-colors hover:text-accent sm:text-sm ${
                     isActive ? "text-accent" : "text-muted"
                   }`}
                 >

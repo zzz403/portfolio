@@ -67,17 +67,19 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="light" suppressHydrationWarning>
+    <html
+      lang="en"
+      className={`light ${geistSans.variable} ${geistMono.variable} ${inter.variable} ${ebGaramond.variable}`}
+      suppressHydrationWarning
+    >
       <head>
         <script
           dangerouslySetInnerHTML={{
-            __html: `(function(){try{var t=localStorage.getItem("theme");if(t==="light"||t==="dark"){document.documentElement.className=t}}catch(e){}})()`,
+            __html: `(function(){try{var t=localStorage.getItem("theme");if(t==="light"||t==="dark"){var c=document.documentElement.classList;c.remove("light","dark");c.add(t)}}catch(e){}})()`,
           }}
         />
       </head>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} ${ebGaramond.variable} antialiased`}
-      >
+      <body className="antialiased">
         <Header />
         <main>{children}</main>
         <Footer />

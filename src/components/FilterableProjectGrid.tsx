@@ -127,7 +127,7 @@ function GridCard({ project, index }: { project: Project; index: number }) {
           scale: { duration: 0.2, delay: index * 0.03 },
           layout: { duration: 0.3 },
         }}
-        className="group rounded-lg border border-border bg-surface p-5 transition-colors duration-200 hover:border-accent/30 hover:bg-surface-hover"
+        className="group rounded-lg border border-border bg-surface p-5 shadow-card transition-[border-color,background-color,box-shadow] duration-200 hover:border-accent/30 hover:bg-surface-hover hover:shadow-card-hover"
         whileHover={{ y: -3 }}
       >
         <h3 className="truncate text-base font-semibold text-foreground transition-colors group-hover:text-accent">

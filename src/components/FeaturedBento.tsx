@@ -64,7 +64,7 @@ export default function FeaturedBento({ projects }: FeaturedBentoProps) {
             }
           >
             <motion.article
-              className="group relative overflow-hidden rounded-xl border border-border bg-surface h-full transition-colors hover:bg-surface-hover"
+              className="group relative overflow-hidden rounded-xl border border-border bg-surface h-full shadow-card transition-[background-color,box-shadow] duration-300 hover:bg-surface-hover hover:shadow-card-hover"
               initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-60px" }}

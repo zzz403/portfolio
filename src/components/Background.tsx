@@ -75,7 +75,7 @@ export default function Background() {
             {experiences.map((exp, i) => (
               <ScrollReveal key={exp.company} delay={0.1 + i * 0.08}>
                 <motion.div
-                  className="group rounded-xl border border-border bg-surface p-6 transition-colors hover:bg-surface-hover"
+                  className="group rounded-xl border border-border bg-surface p-6 shadow-card transition-[background-color,box-shadow] duration-300 hover:bg-surface-hover hover:shadow-card-hover"
                   whileHover={{ y: -2 }}
                   transition={{ duration: 0.3, ease: expo }}
                 >
@@ -110,7 +110,7 @@ export default function Background() {
             <ScrollReveal delay={0.2}>
               <div className="lg:sticky lg:top-28">
                 <motion.div
-                  className="group rounded-xl border border-border bg-surface p-6 transition-colors hover:bg-surface-hover"
+                  className="group rounded-xl border border-border bg-surface p-6 shadow-card transition-[background-color,box-shadow] duration-300 hover:bg-surface-hover hover:shadow-card-hover"
                   whileHover={{ y: -2 }}
                   transition={{ duration: 0.3, ease: expo }}
                 >
