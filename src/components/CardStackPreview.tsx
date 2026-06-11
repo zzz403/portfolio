@@ -31,6 +31,7 @@ export default function CardStackPreview({ project }: CardStackPreviewProps) {
             {new Date(project.date).toLocaleDateString("en-US", {
               year: "numeric",
               month: "long",
+              timeZone: "UTC",
             })}
           </p>
 
