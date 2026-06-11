@@ -1,0 +1,126 @@
+---
+title: "Nobody Clicks the Citations: 11,048 Sessions of a Deployed AI Tutor"
+description: "We added citations to YouWoAI so students could verify answers. In a course pilot, 71% engaged with them. In production: 1.6%. What actually drives verification isn't more citations — it's conversational context."
+date: "2026-06-11"
+category: "tech"
+project: "youwoai"
+---
+
+At YouWoAI we built what the RAG literature says you should build: every
+answer comes with inline citation markers, citation cards, and an in-app
+evidence viewer that shows the exact source passage. The premise is that
+citations lower the cost of verification, so students will verify instead of
+blindly trusting the model.
+
+Then we instrumented everything and looked at whether anyone actually does.
+
+This is an ongoing study (with Jack Sun and Michael Jongho Moon at the
+University of Toronto) comparing two data sources from the *same system*: a
+course-context pilot with consenting students (55 tasks, run under a UofT
+research ethics protocol) and two months of anonymized production telemetry
+from a research cohort of **202 users who opted into the study** — drawn from
+**YouWoAI's 20,000+ user platform** — totaling **11,048 sessions and 629
+citation clicks**. The headline numbers changed how I think about "trustworthy AI"
+features.
+
+## The ecological-validity gap
+
+In the course pilot, students clicked citations in **70.9%** of tasks, and
+82% of clicks progressed to actually opening the evidence panel.
+
+In production — same product, same citations, no instructor watching:
+
+- **1.58%** of citation-bearing sessions had any citation click (Cohen's
+  *h* = 1.75 vs. the pilot; risk ratio ≈ 45).
+- **82.2% of the cohort never clicked a citation once**, across all their
+  sessions over two months.
+- Among users who eventually clicked, the median time-to-first-click was
+  **9 sessions**. Verification isn't a first-encounter behavior; it's a
+  slowly acquired habit.
+
+![Verification funnel by data source: the pilot contracts gradually from 100 to 70.9 to 60.0 to 12.7 percent, while the production funnel collapses immediately to 1.6 percent](/blog/citation-study/fig1_funnel.png)
+
+If you've only evaluated your verification UX in a classroom study or a user
+test, you've probably measured the incentive structure of the study, not your
+design. Every controlled result deserves a deployment replication before you
+believe it.
+
+## Context is the lever — a 49× one
+
+The production data has three conversational contexts: **note** (chat
+grounded in a single document), **folder** (multi-document RAG), and **open
+chat** (no document grounding). Source-opens per session:
+
+![Mean source-opens per session by conversational context: folder context shows a 40x lift over note and user contexts](/blog/citation-study/fig2_context_comparison.png)
+
+Folder sessions are also longer and chattier, so we fit a negative-binomial
+model controlling for session duration, message count, and platform. The
+effect survives, enormously: **IRR = 49** for folder context vs.
+single-document (cluster-bootstrap 95% CI [14, 917], and the lower bound is
+still 14×). Meanwhile open chat *suppresses* verification relative to
+single-document context (IRR = 0.31) once you control for confounds.
+
+![Forest plot of the negative-binomial regression: folder context dominates all other predictors of source-opens](/blog/citation-study/fig4_nb_forest.png)
+
+Information Foraging Theory gives a clean account: when an answer synthesizes
+*multiple* heterogeneous sources, disambiguating "which document said this"
+has real value, so users open sources. A single-document answer creates no
+such pressure. Open chat creates none at all.
+
+## Keep verification inside the app
+
+Citations pointing at the user's own in-app notes progressed to a source-open
+at **3.46×** the rate of citations pointing at external web links.
+
+![Click-to-open progression rate by citation type: note citations progress at 3.46 times the rate of web citations](/blog/citation-study/fig5_note_vs_web.png)
+
+Part of this is mechanical — a web citation opens an external tab and leaves
+our instrumented surface — but the design implication holds either way:
+**every external-link citation forfeits the verification interaction**. If
+you can render the source in an in-app evidence panel, do it.
+
+## Three modes of "reading the evidence"
+
+We originally proposed a four-level Verification Depth Score (click → open →
+scroll → deep read). The data disagreed. A Gaussian mixture over log dwell
+times in the evidence viewer finds exactly three modes:
+
+![Density of log dwell time with a three-component Gaussian mixture: accidental opens around 70 milliseconds, skims around 5 seconds, engaged reads around 171 seconds](/blog/citation-study/fig3_dwell_mixture.png)
+
+- **Accidental** (~6%): μ ≈ 70 *milliseconds*. A misclick, not a behavior.
+- **Skim** (~63%): μ ≈ 5.3 s. A glance to confirm the source exists.
+- **Engaged read** (~31%): μ ≈ 171 s. Actual verification.
+
+A mixed-effects model puts the between-user share of dwell variance at
+ICC = 0.20 — being a "verifier" is partly a stable trait, but mostly
+situational. Which is good news: situations are designable.
+
+## The null result that matters most
+
+Showing more citations does nothing. A logistic regression of
+any-click on citations-per-message — controlling for duration, context,
+platform — finds no effect (OR = 1.09, *p* = 0.36).
+
+I want to underline this because it's the cheapest mistake to make: citation
+*quantity* looks like diligence, demos well, and has zero behavioral effect.
+The levers that actually move verification, in our data, are **conversational
+context** and **session time**.
+
+## What I'd tell someone building grounded AI
+
+1. **Don't equate citation availability with verification.** Availability is
+   table stakes; behavior needs a reason.
+2. **Engineer the context, not the citation count.** Multi-document grounding
+   is the one condition where verification happens at scale. Make extending a
+   chat to multiple documents trivial — or the default.
+3. **Own the verification surface.** External links leak engagement;
+   in-app evidence viewers keep it.
+4. **Re-run your classroom numbers in the wild before quoting them.** Ours
+   dropped 45×.
+
+This is work in progress — the folder effect is correlational and needs a
+randomized test, iOS instrumentation had gaps, the telemetry covers the
+opted-in research cohort rather than the full user base, and we haven't
+linked engagement to learning outcomes yet. But the gap itself is too large to wait
+on: if your "trustworthy AI" story depends on users checking sources, deployment
+data probably disagrees with your user study.

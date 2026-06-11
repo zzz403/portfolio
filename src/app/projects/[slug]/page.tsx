@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { MDXRemote } from "next-mdx-remote-client/rsc";
+import remarkGfm from "remark-gfm";
 import { getAllProjects, getProjectBySlug } from "@/lib/projects";
 import ProjectDemo from "@/components/ProjectDemo";
 
@@ -80,7 +81,10 @@ export default async function ProjectPage({
 
         <hr className="my-10 border-border" />
         <div className="prose">
-          <MDXRemote source={project.content} />
+          <MDXRemote
+            source={project.content}
+            options={{ mdxOptions: { remarkPlugins: [remarkGfm] } }}
+          />
         </div>
       </div>
     </article>

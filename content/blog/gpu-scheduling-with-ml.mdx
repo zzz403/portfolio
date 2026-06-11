@@ -1,16 +1,150 @@
 ---
-title: "ML-Assisted GPU Scheduling in Operating Systems"
-description: "Using learned models to analyze and improve scheduling performance."
-date: "2025-11-15"
+title: "Ranking Beats Accuracy: What We Learned Scheduling GPUs with ML"
+description: "We revisited Shortest-Job-First scheduling on production GPU traces from Alibaba. SJF is much fairer than its reputation — and your runtime predictor doesn't need to be accurate, it needs to sort."
+date: "2026-01-06"
 category: "tech"
 ---
 
-## Motivation
+Shared GPU clusters have a queueing problem. Job runtimes span four orders of
+magnitude — a 30-second smoke test waits behind a week-long training run — so
+under contention, *waiting time* dominates how slow the cluster feels, not
+compute.
 
-Modern GPU workloads are increasingly heterogeneous. Traditional schedulers rely on hand-tuned heuristics that can't adapt to the diversity of today's workloads.
+Shortest-Job-First (SJF) is the textbook answer: when runtimes are known, it's
+provably optimal for average completion time. But two objections have kept it
+out of favor. First, **fairness** — prioritizing short jobs supposedly starves
+long ones, which is why fairness-first schedulers like Themis and Quincy
+exist. Second, **you don't know the runtimes** — SJF needs a prediction, and
+predictions are wrong.
 
-## Approach
+Yi Yang and I spent a term at the University of Toronto testing both
+objections against production-scale traces (~100,000 jobs from Alibaba's GPU
+clusters) with an extended cluster simulator. Both objections mostly don't
+survive contact with the data. This post is the tour; the full write-up is in
+[our workshop paper (PDF)](/papers/sjf-gpu-scheduling-workshop.pdf).
 
-We investigated using lightweight ML models to predict optimal scheduling decisions based on workload characteristics, historical performance data, and resource utilization patterns.
+## Finding 1: SJF's fairness problem is smaller than its reputation
 
-The key insight: even simple models can outperform static heuristics when given the right features to reason about.
+We compared FIFO against oracle SJF (true runtimes) and three history-based
+SJF variants that estimate runtime from per-user, per-group, and
+per-group-per-GPU-type averages (SJU / SJG / SJGG).
+
+![Efficiency and fairness comparison between FIFO and SJF-style policies: average JCT, average waiting time, average slowdown, and Jain's fairness index](/blog/gpu-scheduling/efficiency.png)
+
+Three things stand out:
+
+- **Average JCT barely moves** (under 1%). Long training jobs dominate the
+  average, so no ordering policy can shift it much. If a scheduling paper
+  leads with average JCT improvements, look closer.
+- **Waiting time is where SJF wins**: 28.9s average under FIFO drops to
+  ~14–15s under every SJF variant — roughly half — and average slowdown falls
+  from 1.20 to 1.03.
+- **Fairness goes *up*, not down.** FIFO's Jain's fairness index across users
+  is 0.667; oracle SJF scores 0.992. FIFO is the policy that treats users
+  unequally — whoever queues behind a monster job loses. And across all our
+  runs, with a one-hour starvation threshold, SJF starved **zero** jobs.
+
+We also tested aging (priority boosts for waiting jobs) as a starvation guard.
+It's worth having as a worst-case bound in bursty workloads, but it didn't
+improve fairness on realistic traces — it slightly hurt it. Aging is a
+robustness mechanism, not a fairness mechanism.
+
+## Finding 2: predict in log space, or your tails will hurt you
+
+To replace the oracle, we trained four runtime predictors on the trace
+features: an MLP, XGBoost, LightGBM, and a mixture-of-experts variant (CRR++:
+k-means clusters → one LightGBM expert each → random-forest router).
+
+The trap is the target distribution. Raw GPU job durations are brutally
+right-skewed — most jobs are short, a few run five orders of magnitude longer:
+
+![Raw feature distributions: every duration-related feature is collapsed against zero with extreme right tails](/blog/gpu-scheduling/no_transf.png)
+
+A `log(x+1)` transform makes the same features almost normal:
+
+![The same features after log transformation, now roughly bell-shaped](/blog/gpu-scheduling/transf.png)
+
+Prior work argued for MAE loss on raw durations *because* of the skew. We
+found the opposite works better: train with MSE on the log-transformed target.
+Same model, same features — here's XGBoost's signed percentage error both
+ways:
+
+![XGBoost error distribution when trained with MSE on log-transformed targets: tightly concentrated around zero](/blog/gpu-scheduling/xgb_mse_pred_err.png)
+
+![XGBoost error distribution when trained with MAE on raw targets: wide, skewed, with large masses at both clipping boundaries](/blog/gpu-scheduling/xgb_mae_pred_err.png)
+
+On the raw target, tree models fall apart in the tails — XGBoost's 95th
+percentile error jumps from **93% to 388%**. The median barely changes
+(~15% either way); the tails are the whole story.
+
+## Finding 3: stop grading predictors on error — grade them on ordering
+
+Here's the observation that reframed the project: **SJF never uses the
+predicted runtime as a number. It only uses it to sort.** A predictor that's
+2× off on every job produces *exactly* the schedule of a perfect oracle, as
+long as the ordering holds.
+
+So instead of RMSE, we evaluated rank alignment — Spearman's ρ (global
+monotonicity) and Kendall's τ (pairwise inversions, which is literally what
+corrupts an SJF queue):
+
+| Predictor | Spearman's ρ | Kendall's τ |
+|---|---|---|
+| LightGBM (log+MSE) | **0.962** | **0.871** |
+| XGBoost (log+MSE) | 0.961 | 0.871 |
+| CRR++ (log+MSE) | 0.961 | 0.870 |
+| MLP (log+MSE) | 0.956 | 0.862 |
+| `gpu_group_dur` heuristic | 0.94 | 0.84 |
+| `group_dur` heuristic | 0.88 | 0.77 |
+| `user_dur` heuristic | 0.32 | 0.23 |
+
+Two takeaways. The learned models beat the best history-based heuristic, but
+not by miles — if you already bucket jobs by (group, GPU type), you've
+captured most of the ranking signal. And per-user averages alone (ρ = 0.32)
+are nearly useless: knowing *who* submitted a job tells you little about how
+long it runs.
+
+When we plugged these predictors into the simulator (15,000 jobs, batched
+inference), ranking quality predicted scheduling performance better than any
+pointwise error metric did. Models with ~15% median error scheduled almost
+identically to the oracle.
+
+## Finding 4: the oracle isn't even optimal
+
+The weirdest result: ML-assisted SJF occasionally **beat oracle SJF** on JCT,
+reproducibly.
+
+![Top-8 policies by JCT: MLP-based SJF variants edge out oracle SJF](/blog/gpu-scheduling/benchmark.jpg)
+
+The explanation is placement coupling. The simulator (like real clusters)
+sorts a global queue, then greedily first-fits each job onto nodes. Ordering
+changes which nodes are free when each job is considered — so a "wrong"
+ordering can accidentally produce better packing, especially with multi-GPU
+jobs and GPU-type constraints causing fragmentation. Once scheduling and
+placement interact, perfect runtime knowledge no longer guarantees a perfect
+schedule. Ordering optimality ≠ end-to-end optimality.
+
+## An engineering footnote
+
+Our first integration called the predictor every time the scheduler placed a
+task. Simulation time went from ~60s to 120–280s for the tree models and over
+800s for the mixture-of-experts — almost entirely Python call overhead on tiny
+batches, not model compute. Batching all predictions before the scheduling
+loop brought inference under one second total. The model was never the
+bottleneck; the integration was. This generalizes.
+
+## What I'd tell someone building this
+
+1. **Measure waiting time and tail slowdown, not average JCT.** That's where
+   scheduling policy actually shows up.
+2. **SJF + a starvation bound is a strong default.** Its unfairness is mostly
+   folklore on realistic traces; FIFO is the unfair one.
+3. **Train predictors on log-transformed targets, evaluate them with rank
+   metrics.** Kendall's τ against held-out runtimes is a better preview of
+   scheduling performance than RMSE will ever be.
+4. **Don't chase oracle accuracy.** Ranking is the job. A grouped-history
+   heuristic gets you 90% of the way; a LightGBM closes most of the rest.
+
+Full details, metric definitions, and references are in the
+[paper (PDF)](/papers/sjf-gpu-scheduling-workshop.pdf). Joint work with Yi
+Yang at the University of Toronto.

@@ -231,4 +231,30 @@ body {
 .prose img {
   border-radius: 8px;
   margin-bottom: 1.5rem;
+  background: #ffffff;
+  border: 1px solid var(--border);
+  padding: 0.5rem;
+}
+
+.prose table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 1.5rem;
+  font-size: 0.875rem;
+}
+
+.prose th {
+  text-align: left;
+  font-weight: 600;
+  padding: 0.6rem 0.9rem;
+  border-bottom: 2px solid var(--border);
+}
+
+.prose td {
+  padding: 0.55rem 0.9rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.prose tbody tr:hover {
+  background: var(--surface);
 }
