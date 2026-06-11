@@ -7,6 +7,22 @@ const expo = [0.16, 1, 0.3, 1] as const;
 
 const experiences = [
   {
+    company: "IBM",
+    role: "AI Engineer",
+    type: "Internship",
+    period: "May 2026 — Present",
+    description:
+      "On the watsonx Context Manager team, building and testing the RAG system powering IBM's products—owning retrieval pipelines and evaluation to ensure accurate, reliable responses at enterprise scale.",
+  },
+  {
+    company: "Vector Institute",
+    role: "Undergraduate Research Assistant",
+    type: "Research Contract",
+    period: "Jan — Apr 2026",
+    description:
+      "Built a coupled speech–language pipeline where LLMs and ASR models interact to iteratively refine transcription quality and semantic consistency.",
+  },
+  {
     company: "YouWoAI",
     role: "AI Infrastructure Engineer",
     type: "Founding Engineer",
