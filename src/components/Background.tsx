@@ -8,6 +8,7 @@ const expo = [0.16, 1, 0.3, 1] as const;
 
 type Experience = {
   company: string;
+  url: string;
   role: string;
   type: string;
   period: string;
@@ -17,6 +18,7 @@ type Experience = {
 const experiences: Experience[] = [
   {
     company: "IBM",
+    url: "https://www.ibm.com",
     role: "AI Engineer",
     type: "Internship",
     period: "May 2026 — Present",
@@ -28,7 +30,8 @@ const experiences: Experience[] = [
   },
   {
     company: "Vector Institute",
-    role: "Undergraduate Research Assistant",
+    url: "https://vectorinstitute.ai",
+    role: "Research Assistant",
     type: "Research Contract",
     period: "Jan — Apr 2026",
     highlights: [
@@ -39,6 +42,7 @@ const experiences: Experience[] = [
   },
   {
     company: "YouWoAI",
+    url: "https://youwo.ai",
     role: "AI Infrastructure Engineer",
     type: "Founding Engineer",
     period: "Jul 2025 — Present",
@@ -50,7 +54,8 @@ const experiences: Experience[] = [
   },
   {
     company: "University of Toronto",
-    role: "Researcher · Backend Engineer · TA",
+    url: "https://www.utoronto.ca",
+    role: "Researcher · TA",
     type: "Part-time",
     period: "May 2025 — Present",
     highlights: [
@@ -61,6 +66,7 @@ const experiences: Experience[] = [
   },
   {
     company: "Siemens Healthineers",
+    url: "https://www.siemens-healthineers.com",
     role: "Database Engineer",
     type: "Internship",
     period: "Jul — Sep 2023",
@@ -74,7 +80,7 @@ const experiences: Experience[] = [
 const education = {
   school: "University of Toronto",
   degree: "Honours Bachelor of Science",
-  major: "Computer Science Specialist",
+  major: "Double Major in Computer Science & Statistics",
   period: "2023 — 2027",
   gpa: "4.0",
 };
@@ -84,7 +90,7 @@ function ExperienceTabs() {
   const exp = experiences[active];
 
   return (
-    <div className="mt-10 grid gap-6 sm:grid-cols-[13rem_1fr] sm:gap-10">
+    <div className="mt-10 grid gap-6 sm:grid-cols-[11rem_1fr] sm:gap-16">
       {/* Tab list */}
       <div
         role="tablist"
@@ -103,7 +109,7 @@ function ExperienceTabs() {
               aria-selected={isActive}
               onClick={() => setActive(i)}
               className={`group relative flex cursor-pointer items-baseline gap-3 whitespace-nowrap rounded-md px-4 py-3 text-left transition-colors duration-300 sm:rounded-l-none sm:rounded-r-md ${
-                isActive ? "text-accent" : "text-muted/70 hover:bg-surface/60 hover:text-foreground"
+                isActive ? "bg-surface/70 text-accent" : "text-muted/70 hover:bg-surface/50 hover:text-foreground"
               }`}
             >
               {isActive && (
@@ -120,7 +126,7 @@ function ExperienceTabs() {
               >
                 {String(i + 1).padStart(2, "0")}
               </span>
-              <span className="font-mono text-sm">{e.company}</span>
+              <span className="font-mono text-[0.8125rem]">{e.company}</span>
             </button>
           );
         })}
@@ -134,32 +140,35 @@ function ExperienceTabs() {
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -8 }}
           transition={{ duration: 0.3, ease: expo }}
-          className="min-h-[18rem] rounded-2xl border border-border bg-surface p-7 shadow-card sm:p-9"
+          className="min-h-[18rem]"
         >
-          <div className="flex flex-wrap items-start justify-between gap-3">
-            <div>
-              <h3 className="text-2xl font-semibold tracking-tight text-foreground">
-                {exp.role}
-              </h3>
-              <p className="mt-1 text-sm text-accent">@ {exp.company}</p>
-            </div>
-            <span className="rounded-full border border-border px-3 py-1 font-mono text-[0.7rem] text-muted">
-              {exp.period}
-            </span>
-          </div>
+          <h3 className="text-2xl font-semibold tracking-tight text-foreground sm:text-3xl">
+            {exp.role}{" "}
+            <a
+              href={exp.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-accent decoration-accent/40 underline-offset-4 transition-colors hover:underline"
+            >
+              @ {exp.company}
+            </a>
+          </h3>
+          <p className="mt-2 font-mono text-xs text-muted">
+            {exp.type}
+            <span className="mx-2 text-border">·</span>
+            {exp.period}
+          </p>
 
-          <div className="my-6 h-px w-full bg-border/70" />
-
-          <ul className="space-y-3.5">
+          <ul className="mt-8 space-y-5">
             {exp.highlights.map((h, hi) => (
               <motion.li
                 key={h}
                 initial={{ opacity: 0, x: -8 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.35, delay: 0.08 + hi * 0.06, ease: expo }}
-                className="flex gap-3 text-sm leading-relaxed text-muted"
+                className="flex gap-4 text-base leading-relaxed text-muted"
               >
-                <span className="mt-1.5 flex-none text-accent">▸</span>
+                <span className="mt-1 flex-none text-accent">▸</span>
                 {h}
               </motion.li>
             ))}
@@ -201,7 +210,7 @@ function EducationStrip() {
 export default function Background() {
   return (
     <section className="px-6 py-32">
-      <div className="mx-auto max-w-4xl">
+      <div className="mx-auto max-w-5xl">
         <ScrollReveal>
           <p className="mb-3 font-mono text-sm text-accent">Background</p>
         </ScrollReveal>
